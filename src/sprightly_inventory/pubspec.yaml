@@ -1,5 +1,5 @@
 name: sprightly_inventory
-description: A new Flutter project.
+description: Private, Free & Open Source Inventory Manager
 publish_to: 'none'
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -39,6 +39,9 @@ dependencies:
 
   # Utility
   interpolation: ^2.0.0
+
+  # package information
+  package_info: ^2.0.2
 
 dev_dependencies:
   flutter_test:
@@ -82,3 +85,8 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+  assets:
+    - assets/queries_min/ # custom & complex sql queries
+    - assets/i18n/ # internationalization (i18n) & language support
+    - assets/config/ # app_config(AppConfig) configuration files
