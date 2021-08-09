@@ -23,6 +23,9 @@ typedef FutureOr<T> ReadyOrNotWorker<T>();
 ///   SomeClass._() {
 ///     // **attach the helper executer**
 ///     getReadyWorker = _initialize; // can be used with `super.` prefix, too
+///     // Optionally, you can add more singleton FUture jobs
+///     additionalSingleJobs["cleanUpJob"] = _cleanUp;
+///     additionalSingleJobs["dumpJob"] = _dump;
 ///   }
 ///
 ///   static SomeClass _cache = SomeClass._();
@@ -30,28 +33,47 @@ typedef FutureOr<T> ReadyOrNotWorker<T>();
 ///   factory SomeClass() => _cache;
 ///
 ///   // this private value is set only if the [_initialize] function complete successfully
-///   Object _asyncObject;
+///   late Object _readyObject;
 ///
 ///   // thus, this publicly accessible [value] depends on the successful execution
 ///   // of [_initialize] & it only needs to happen once
-///   Object get value => _asyncObject;
+///   Object get value => _readyObject;
 ///
 ///   // the async job that need to be executed in singleton manner
 ///   Future _initialize() async {
-///     _asyncObject = await someAsyncJob();
+///     _readyObject = await someAsyncJob();
+///   }
+///
+///   // Other singleton jobs
+///   Future _cleanUp(){
+///     // Do some cleanup jobs after heavy-lifting, that *may* take some time
+///   }
+///
+///   // Other singleton jobs
+///   Future _dump(){
+///     // Dumps some craps, maybe.
+///     // Be sure not to use [_readyObject] or [value] as we'll run this job
+///     // despite the parent instance has achieved [ready] state or not. Hence,
+///     // [_readyObject] or [value] will not be materialized.
 ///   }
 /// }
 ///
 /// void main() async {
 ///   SomeClass someClass = SomeClass();
 ///
+///   // sometimes, we need to dump craps whether we're ready or not
+///   someClass.triggerJob("dumpJob");
+///
 ///   // either check before running
 ///   if (!someClass.ready) await someClass.getReady();
 ///   // or, it doesn't matter if someone has already run it or it's in progress
 ///   await someClass.getReady();
 ///
-///   // now we're safe to use
+///   // now it is safe to use
 ///   someClass.value;
+///
+///   // No need to await for cleanUp, along with [onReady] safety net
+///   someClass.triggerJob("cleanUpJob", onReady: true);
 /// }
 /// ```
 mixin ReadyOrNotMixin<T> {
@@ -90,7 +112,14 @@ mixin ReadyOrNotMixin<T> {
   /// Whether the [getReady] has been executed ***once*** successfully or not
   bool get working => _working || (_workingJobs.length > 0);
 
-  /// The singleton executor of [additionalSingleJobs]
+  /// Get a set of any of the the running jobs in [additionalSingleJobs]
+  Set<String> get workingJobs => _workingJobs;
+
+  /// The singleton executor of a job in [additionalSingleJobs]
+  ///
+  /// [jobName] should be one of the job in the [additionalSingleJobs] list.
+  /// If [onReady] is true, it makes sure the target job should run only if the
+  /// current instance achieved [ready] state
   FutureOr<R?> triggerJob<R>(String jobName, {bool onReady = false}) async {
     var shouldProceed = additionalSingleJobs.containsKey(jobName);
     if (shouldProceed) {
