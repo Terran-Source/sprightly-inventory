@@ -1,5 +1,5 @@
 extension Trimmer on String {
-  String get escapedTrim => RegExp.escape(this.trim());
+  String get escapedTrim => RegExp.escape(trim());
 
   String trimming(String trimmer) {
     final pattern = RegExp(
@@ -7,27 +7,26 @@ extension Trimmer on String {
         caseSensitive: true,
         multiLine: false,
         dotAll: true);
-    return this
-        .trim()
-        .replaceAllMapped(pattern, (match) => '${match.group(1)}')
+    return trim()
+        .replaceAllMapped(pattern, (match) => match[1]!.toString())
         .trim();
   }
 
   String trimmed(List<String> trimmer) =>
       trimmer.fold(this, (str, trm) => str.trimming(trm));
 
-  List<String> toList() =>
-      this.runes.map((e) => new String.fromCharCode(e)).toList();
+  List<String> toList() => runes.map((e) => String.fromCharCode(e)).toList();
 
-  Set<String> toSet() => Set.from(this.toList());
+  Set<String> toSet() => Set.from(toList());
 }
 
 final _allowedCharacters =
-    new RegExp(r'[\w_]+', multiLine: false, unicode: true, dotAll: true);
+    RegExp(r'[\w_]+', multiLine: false, unicode: true, dotAll: true);
 
 extension CleanString on String {
-  String? escapeMessy([String escapeWith = '_']) => _allowedCharacters
-      .allMatches(this.trim())
+  String escapeMessy([String escapeWith = '_']) => _allowedCharacters
+      .allMatches(trim())
       .map((match) => match.group(0))
+      .where((s) => null != s && s.isNotEmpty)
       .join(escapeWith);
 }

@@ -3,7 +3,7 @@ library marganam.worker;
 import 'dart:async';
 
 /// SIngleton async (or not) function type
-typedef FutureOr<T> ReadyOrNotWorker<T>();
+typedef ReadyOrNotWorker<T> = FutureOr<T> Function();
 
 /// Helper mixin to help defining a singleton function execution.
 ///
@@ -86,7 +86,7 @@ mixin ReadyOrNotMixin<T> {
 
   /// Register additional singleton jobs
   final additionalSingleJobs = <String, ReadyOrNotWorker>{};
-  final _workingJobs = Set<String>();
+  final _workingJobs = <String>{};
   final _workingFutures = <String, FutureOr>{};
 
   /// Whether the [getReady] has been executed ***once*** successfully or not
@@ -110,7 +110,7 @@ mixin ReadyOrNotMixin<T> {
   }
 
   /// Whether the [getReady] has been executed ***once*** successfully or not
-  bool get working => _working || (_workingJobs.length > 0);
+  bool get working => _working || _workingJobs.isNotEmpty;
 
   /// Get a set of any of the the running jobs in [additionalSingleJobs]
   Set<String> get workingJobs => _workingJobs;
@@ -130,8 +130,7 @@ mixin ReadyOrNotMixin<T> {
       if (shouldProceed && !alreadyWorking) {
         _workingJobs.add(jobName);
         try {
-          FutureOr<R> jobFuture =
-              additionalSingleJobs[jobName]!() as FutureOr<R>;
+          final jobFuture = additionalSingleJobs[jobName]!() as FutureOr<R>;
           _workingFutures[jobName] = jobFuture;
           return await jobFuture;
         } finally {

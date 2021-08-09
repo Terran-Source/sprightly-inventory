@@ -15,14 +15,15 @@ abstract class AppDao {
 }
 
 class AppInformation with ReadyOrNotMixin<PackageInfo> {
-  late PackageInfo packageInfo;
+  factory AppInformation() => _cache;
+
+  static final _cache = AppInformation._();
 
   AppInformation._() {
     getReadyWorker = () async => packageInfo = await PackageInfo.fromPlatform();
   }
 
-  static AppInformation _cache = AppInformation._();
-  factory AppInformation() => _cache;
+  late PackageInfo packageInfo;
 
   String get appName => packageInfo.appName;
   String get packageName => packageInfo.packageName;

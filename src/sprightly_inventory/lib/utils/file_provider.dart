@@ -193,43 +193,46 @@ class _DirectoryCleanUp {
 class DirectoryInfo {
   final Directory current;
   //Stream<FileSystemEntity> contents;
-  var directories = <DirectoryInfo>[];
-  var files = <File>[];
+  List<DirectoryInfo> directories = <DirectoryInfo>[];
+  List<File> files = <File>[];
 
   static Future<DirectoryInfo> readDirectory(Directory directory) async {
     final directoryInfo = DirectoryInfo(directory);
     final contents = directory.list();
     await for (final content in contents) {
-      if (content is File)
+      if (content is File) {
         directoryInfo.files.add(content);
-      else if (content is Directory)
+      } else if (content is Directory) {
         directoryInfo.directories.add(await compute(readDirectory, content));
+      }
     }
     return directoryInfo;
   }
 
   static Future<void> cleanUp(_DirectoryCleanUp target) async {
-    var remainingFiles = <File>[];
+    final remainingFiles = <File>[];
     for (final file in target.directoryInfo.files) {
       if (target.cache.values.any((cacheFile) =>
-          file.path == cacheFile.path && null != cacheFile.downloadOn))
+          file.path == cacheFile.path && null != cacheFile.downloadOn)) {
         remainingFiles.add(file);
-      else
+      } else {
         await file.delete();
+      }
     }
     //if (remainingFiles.length > 0)
     target.directoryInfo.files = remainingFiles;
 
-    var remainingDirs = <DirectoryInfo>[];
+    final remainingDirs = <DirectoryInfo>[];
     for (final dir in target.directoryInfo.directories) {
-      if (dir.isEmpty)
+      if (dir.isEmpty) {
         await dir.current.delete();
-      else {
+      } else {
         await cleanUp(_DirectoryCleanUp(dir, target.cache));
-        if (dir.isEmpty)
+        if (dir.isEmpty) {
           await dir.current.delete();
-        else
+        } else {
           remainingDirs.add(dir);
+        }
       }
     }
     //if (remainingDirs.length > 0)
@@ -239,7 +242,7 @@ class DirectoryInfo {
   DirectoryInfo(this.current);
 
   String get name => current.name;
-  bool get isEmpty => files.length == 0 && directories.length == 0;
+  bool get isEmpty => files.isEmpty && directories.isEmpty;
 }
 
 class CacheFile {
@@ -264,7 +267,7 @@ class CacheFile {
 
 FormattedException<T> _formattedException<T extends Exception>(
   T exception, {
-  messageParams = const <String, dynamic>{},
+  Map<String, dynamic> messageParams = const <String, dynamic>{},
   StackTrace? stackTrace,
 }) =>
     FormattedException(
@@ -275,14 +278,15 @@ FormattedException<T> _formattedException<T extends Exception>(
     );
 
 class RemoteFileCache with ReadyOrNotMixin {
+  factory RemoteFileCache() => universal;
+
+  static RemoteFileCache universal = RemoteFileCache._();
+
   RemoteFileCache._() {
     getReadyWorker = _getReady;
     additionalSingleJobs[_cleanUpJob] = _cleanUp;
     additionalSingleJobs[_dumpJob] = _dump;
   }
-
-  static RemoteFileCache universal = RemoteFileCache._();
-  factory RemoteFileCache() => universal;
 
   static int maxCachedRetentionMins = 7 * 24 * 60; // 7 days
 
@@ -305,12 +309,14 @@ class RemoteFileCache with ReadyOrNotMixin {
     if (await cacheDirectory.exists()) {
       final oldFileCache =
           await getFileText(p.join(_cacheDirectory, _cacheFile));
-      if (null != oldFileCache)
+      if (null != oldFileCache) {
         _fileCache
           ..clear()
-          ..addAll(json.decode(oldFileCache));
-    } else
+          ..addAll(json.decode(oldFileCache) as Map<String, CacheFile>);
+      }
+    } else {
       await cacheDirectory.create(recursive: true);
+    }
 
     // // non-essential for startup. let it be on its own.
     // // i.e. not await(ing)
@@ -322,7 +328,7 @@ class RemoteFileCache with ReadyOrNotMixin {
   }
 
   String _getIdentifier(String source, [String? identifier]) =>
-      "${identifier ?? source.escapeMessy()}";
+      identifier ?? source.escapeMessy();
 
   /// Fetch the file from the [source] url and store in a the local [_cacheDirectory].
   /// Then returns the [CacheFile] containing absolute path of the locally saved file.
@@ -332,7 +338,7 @@ class RemoteFileCache with ReadyOrNotMixin {
   Future<CacheFile?> _getRemoteFileAndCache(
     String source, {
     String? identifier,
-    headers = const <String, String>{},
+    Map<String, String> headers = const <String, String>{},
   }) async {
     try {
       final localIdentifier = _getIdentifier(source, identifier);
@@ -344,7 +350,7 @@ class RemoteFileCache with ReadyOrNotMixin {
       final response = await _client.get(Uri.parse(source), headers: headers);
       if (response.isSuccessStatusCode) {
         final fileName =
-            response.fileName ?? "${localIdentifier}${response.fileExtension}";
+            response.fileName ?? "$localIdentifier${response.fileExtension}";
         // :Old Method:
         // var file = await saveFileAsByteStream(
         //     p.join(_cacheDirectory, fileName), response.stream,
@@ -380,17 +386,18 @@ class RemoteFileCache with ReadyOrNotMixin {
   Future<CacheFile?> _ensureFileExists(
     String source, {
     String? identifier,
-    headers = const <String, String>{},
+    Map<String, String> headers = const <String, String>{},
   }) async {
     // final id = identifier ?? source;
     final id = _getIdentifier(source, identifier);
     if (!(_fileCache.containsKey(id) && null != _fileCache[id]!.downloadOn)) {
       final cacheFile = await _getRemoteFileAndCache(source,
           identifier: id, headers: headers);
-      if (null != cacheFile)
+      if (null != cacheFile) {
         _fileCache[id] = cacheFile;
-      else
+      } else {
         return null;
+      }
     }
     return _fileCache[id];
   }
@@ -398,7 +405,7 @@ class RemoteFileCache with ReadyOrNotMixin {
   Future<String?> getRemoteText(
     String source, {
     String? identifier,
-    headers = const <String, String>{},
+    Map<String, String> headers = const <String, String>{},
   }) async {
     final cacheFile = await _ensureFileExists(source,
         identifier: identifier, headers: headers);
@@ -412,7 +419,7 @@ class RemoteFileCache with ReadyOrNotMixin {
   Future<Uint8List?> getRemoteContent(
     String source, {
     String? identifier,
-    headers = const <String, String>{},
+    Map<String, String> headers = const <String, String>{},
   }) async {
     final cacheFile = await _ensureFileExists(source,
         identifier: identifier, headers: headers);
@@ -427,7 +434,7 @@ class RemoteFileCache with ReadyOrNotMixin {
     String source,
     FutureOr<T?> Function(String? content) mapper, {
     String? identifier,
-    headers = const <String, String>{},
+    Map<String, String> headers = const <String, String>{},
   }) async =>
       mapper(await getRemoteText(source,
           identifier: identifier, headers: headers));
@@ -436,7 +443,7 @@ class RemoteFileCache with ReadyOrNotMixin {
     String source,
     FutureOr<T?> Function(Uint8List? content) mapper, {
     String? identifier,
-    headers = const <String, String>{},
+    Map<String, String> headers = const <String, String>{},
   }) async =>
       mapper(await getRemoteContent(source,
           identifier: identifier, headers: headers));

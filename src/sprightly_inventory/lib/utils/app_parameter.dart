@@ -7,13 +7,12 @@ import 'package:flutter/foundation.dart';
 // import 'package:sprightly_inventory/utils/file_provider.dart';
 
 class Parameter<T> {
-  final String name;
-
   Parameter(this.name, this._value);
 
   static Parameter ofType<Tp>(String name, Tp value) =>
       Parameter<Tp>(name, value);
 
+  final String name;
   T _value;
   T get value => _value;
   set value(T val) {
@@ -24,7 +23,7 @@ class Parameter<T> {
   }
 
   @protected
-  StreamController<T> _controller = StreamController(sync: false);
+  final StreamController<T> _controller = StreamController(sync: false);
 
   Type get type => _value.runtimeType;
   Stream<T> get stream => _controller.stream;

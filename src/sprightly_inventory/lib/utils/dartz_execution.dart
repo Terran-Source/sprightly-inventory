@@ -9,7 +9,7 @@ class DartzExecution {
   static Future<Either<FormattedException, Right>> callEither<Right>(
     FutureOr<Right> Function() caller, {
     StackTrace? stackTrace,
-    messageParams = const <String, dynamic>{},
+    Map<String, dynamic> messageParams = const <String, dynamic>{},
     String? moduleName,
   }) =>
       Task<Right>(() => Future.sync(caller))
@@ -23,7 +23,7 @@ class DartzExecution {
 
   static Future<Either<FormattedException, Right>> call<Right>(
     FutureOr<Right> Function() caller, {
-    messageParams = const <String, dynamic>{},
+    Map<String, dynamic> messageParams = const <String, dynamic>{},
     String? moduleName,
   }) =>
       callEither<Right>(() => execute(
@@ -34,7 +34,7 @@ class DartzExecution {
 
   static FutureOr<Right> execute<Right>(
     FutureOr<Right> Function() caller, {
-    messageParams = const <String, dynamic>{},
+    Map<String, dynamic> messageParams = const <String, dynamic>{},
     String? moduleName,
   }) {
     try {
@@ -53,14 +53,14 @@ class DartzExecution {
 extension _TaskException<E extends Either<Object, R>, R> on Task<E> {
   Task<Either<FormattedException, Rt>> mapException<Rt>({
     StackTrace? stackTrace,
-    messageParams = const <String, dynamic>{},
+    Map<String, dynamic> messageParams = const <String, dynamic>{},
     String? moduleName,
   }) =>
-      this.map(
+      map(
         (either) => either.fold((obj) {
-          if (obj is FormattedException)
+          if (obj is FormattedException) {
             return Left(obj);
-          else if (obj is Exception) {
+          } else if (obj is Exception) {
             return Left(FormattedException(
               obj,
               stackTrace: stackTrace,

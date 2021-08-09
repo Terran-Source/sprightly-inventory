@@ -90,15 +90,16 @@ extension HttpHeaderParser on String {
       {String fieldSeparator = ";",
       String valueSeparator = "=",
       List<String> valueTrimmer = const ["'", '"']}) {
-    final fields = this.split(fieldSeparator).map((c) => c.trim());
-    final result = const <String, dynamic>{};
-    fields.forEach((field) {
-      if (field.indexOf(valueSeparator) >= 0) {
+    final fields = split(fieldSeparator).map((c) => c.trim());
+    final result = <String, dynamic>{};
+    for (final field in fields) {
+      if (field.contains(valueSeparator)) {
         final parts = field.split(valueSeparator);
         result[parts[0].trim()] = parts[1].trimmed(valueTrimmer);
-      } else
+      } else {
         result[field] = true;
-    });
+      }
+    }
     return result;
   }
 }
@@ -106,18 +107,15 @@ extension HttpHeaderParser on String {
 const _defaultCharset = "utf-8";
 
 extension HttpResponseExtension on BaseResponse {
-  bool get isSuccessStatusCode =>
-      200 <= this.statusCode && this.statusCode <= 299;
+  bool get isSuccessStatusCode => 200 <= statusCode && statusCode <= 299;
 
   bool hasHeader(String name) {
-    return this
-        .headers
-        .keys
+    return headers.keys
         .any((header) => header.toLowerCase() == name.toLowerCase());
   }
 
   String? headerValue(String name) =>
-      this.headers[name] ?? this.headers[name.toLowerCase()];
+      headers[name] ?? headers[name.toLowerCase()];
 
   ContentType? get contentType {
     final currentContentType = headerValue(HttpHeaders.contentTypeHeader);
@@ -133,8 +131,8 @@ extension HttpResponseExtension on BaseResponse {
     final contentHeader = headerValue('Content-Disposition');
     if (null != contentHeader) {
       final parts = contentHeader.parseHeaderValue();
-      if (parts.containsKey('filename*')) return parts['filename*'];
-      if (parts.containsKey('filename')) return parts['filename'];
+      if (parts.containsKey('filename*')) return parts['filename*']?.toString();
+      if (parts.containsKey('filename')) return parts['filename']?.toString();
     }
     return null;
   }

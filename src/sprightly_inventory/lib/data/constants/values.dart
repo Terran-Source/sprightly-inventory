@@ -1,9 +1,9 @@
 import 'enums.dart';
 
 class AppSettingNames {
-  const AppSettingNames._();
-  static AppSettingNames universal = AppSettingNames._();
   factory AppSettingNames() => universal;
+  static AppSettingNames universal = const AppSettingNames._();
+  const AppSettingNames._();
 
   // App Information
   String get appName => 'appName';

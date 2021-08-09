@@ -1,32 +1,32 @@
 import 'dart:math';
 
 extension Enums<T> on List<T> {
-  static String toEnumString<T>(T value, [bool withQuote = false]) {
+  static String toEnumString<T>(T value, {bool withQuote = false}) {
     final val = value.toString().split(".").last;
     return withQuote ? "'$val'" : val;
   }
 
   T? find(String val) {
     try {
-      return this.firstWhere((ab) => ab.toString() == '${ab.runtimeType}.$val');
+      return firstWhere((ab) => ab.toString() == '${ab.runtimeType}.$val');
     } catch (_) {
       return null;
     }
   }
 
-  Iterable<String> toStrings([bool withQuote = false]) =>
-      this.map((item) => toEnumString(item, withQuote));
+  Iterable<String> toStrings({bool withQuote = false}) =>
+      map((item) => toEnumString(item, withQuote: withQuote));
 
-  T get random => this[Random().nextInt(this.length)];
+  T get random => this[Random().nextInt(length)];
 
-  String randomString([bool withQuote = false]) =>
-      toEnumString(this.random, withQuote);
+  String randomString({bool withQuote = false}) =>
+      toEnumString(random, withQuote: withQuote);
 
   String getConstraints(String columnName) =>
-      'CHECK ($columnName IN (${this.toStrings(true).join(',')}))';
+      'CHECK ($columnName IN (${toStrings(withQuote: true).join(',')}))';
 }
 
 extension EnumExt<T> on T {
-  String toEnumString([bool withQuote = false]) =>
-      Enums.toEnumString(this, withQuote);
+  String toEnumString({bool withQuote = false}) =>
+      Enums.toEnumString(this, withQuote: withQuote);
 }

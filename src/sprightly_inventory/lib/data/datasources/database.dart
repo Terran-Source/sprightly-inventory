@@ -105,7 +105,7 @@ class CustomQuery {
           identifier ?? fileNameWithoutExtension);
 
   factory CustomQuery.fromWeb(String identifier, String address,
-      {headers = const <String, String>{}}) {
+      {Map<String, String> headers = const <String, String>{}}) {
     Uri.parse(address);
     return CustomQuery._(address, ResourceFrom.Web, identifier,
         headers: headers);
@@ -134,11 +134,13 @@ class CustomQuery {
 }
 
 class SprightlyQueries with ReadyOrNotMixin {
+  factory SprightlyQueries() => universal;
+
+  static SprightlyQueries universal = SprightlyQueries._();
+
   SprightlyQueries._() {
     getReadyWorker = _getReady;
   }
-  static SprightlyQueries universal = SprightlyQueries._();
-  factory SprightlyQueries() => universal;
 
   // startup queries
   CustomQuery get defaultStartupStatement =>
@@ -182,7 +184,7 @@ class SprightlyQueries with ReadyOrNotMixin {
 }
 
 mixin _GenericDaoMixin<T extends GeneratedDatabase> on DatabaseAccessor<T> {
-  SprightlyQueries _queries = SprightlyQueries.universal;
+  final _queries = SprightlyQueries.universal;
 
   bool get _daoMixinReady => _queries.ready;
 
@@ -205,7 +207,7 @@ mixin _GenericDaoMixin<T extends GeneratedDatabase> on DatabaseAccessor<T> {
     var foundUnique = false;
     var attempts = 0;
     var _hashLength = hashedIdMinLength;
-    var _hashLibrary = hashLibrary ?? HashLibrary.values.random;
+    final _hashLibrary = hashLibrary ?? HashLibrary.values.random;
     do {
       result = hashedAll(items,
           hashLength: _hashLength,
@@ -793,9 +795,10 @@ class SprightlySetupDao extends DatabaseAccessor<SprightlySetupDatabase>
 
   @override
   Future<void> onUpgrade(Migrator m, int from, int to) async {
-    for (var i = from; i < to; i++)
+    for (var i = from; i < to; i++) {
       await super
           .customStatement(await _queries.setupMigrations[i]?.load() ?? '');
+    }
   }
 
   @override
@@ -813,9 +816,11 @@ class SprightlySetupDao extends DatabaseAccessor<SprightlySetupDatabase>
     }
   }
 
-  AppInformation _appInformation = AppInformation();
+  final _appInformation = AppInformation();
+  @override
   AppInformation get appInformation => _appInformation;
   late List<AppSetting> _allAppSettings;
+  @override
   List<AppSetting> get allAppSettings => _allAppSettings;
   // List<AppFont> _allAppFonts;
   // List<AppFont> get allAppFonts => _allAppFonts;
@@ -824,27 +829,32 @@ class SprightlySetupDao extends DatabaseAccessor<SprightlySetupDatabase>
   // List<ColorCombo> _allColorCombos;
   // List<ColorCombo> get allColorCombos => _allColorCombos;
 
+  @override
   Future<List<AppSetting>> getAppSettings() => select(appSettings).get();
 
+  @override
   Stream<List<AppSetting>> watchAppSettings() => select(appSettings).watch();
 
+  @override
   Future<AppSetting> getAppSetting(String name) async => AppSetting.fromData(
       await getRecordWithColumnValue(appSettings.actualTableName, 'name', name),
       attachedDatabase);
 
+  @override
   Future<bool> updateAppSetting(String name, String value,
       {AppSettingType? type, bool batchOperation = false}) async {
-    var appSetting = await getAppSetting(name);
-    appSetting.copyWith(
+    final existingAppSetting = await getAppSetting(name);
+    final updatedAppSetting = existingAppSetting.copyWith(
       value: value,
       type: type,
       updatedOn: DateTime.now().toUtc(),
     );
-    var result = updateRecord(appSettings, appSetting);
+    final result = updateRecord(appSettings, updatedAppSetting);
     if (!batchOperation) _allAppSettings = await getAppSettings();
     return result;
   }
 
+  @override
   Future<bool> updateAppSettings(Map<String, String> settings) async {
     var result = true;
     settings.forEach((name, value) async => result =
@@ -945,7 +955,7 @@ class SprightlySetupDatabase extends _$SprightlySetupDatabase {
         onCreate: sprightlySetupDao.onCreate,
         onUpgrade: sprightlySetupDao.onUpgrade,
         beforeOpen: (OpeningDetails details) async {
-          Migrator m = this.createMigrator();
+          final m = createMigrator();
           await sprightlySetupDao.beforeOpen(details, m);
         },
       );

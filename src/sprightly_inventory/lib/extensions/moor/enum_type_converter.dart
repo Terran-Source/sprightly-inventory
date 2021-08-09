@@ -19,7 +19,7 @@ class EnumTypeConverter<T> extends TypeConverter<T, String> {
 }
 
 class ExtendedValueSerializer extends ValueSerializer {
-  final ValueSerializer _defaultSerializer = const ValueSerializer.defaults();
+  ValueSerializer get _defaultSerializer => const ValueSerializer.defaults();
 
   const ExtendedValueSerializer();
 
@@ -28,8 +28,11 @@ class ExtendedValueSerializer extends ValueSerializer {
     try {
       return _defaultSerializer.fromJson<T>(json);
     } catch (_) {
+      if (null == json) return null as T;
       if (T == bool && json is int) return (json == 1) as T;
-      if (enumTypes.containsKey(T)) return enumTypes[T]!.find(json);
+      if (enumTypes.containsKey(T)) {
+        return enumTypes[T]!.find(json.toString()) as T;
+      }
 
       return json as T;
     }

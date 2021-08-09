@@ -34,7 +34,7 @@ class Tracing {
   /// };
   /// ```
   final RegExp _regExp =
-      new RegExp(r'^#(\d+) +(.+) +\(package:([^/]+)/(.+\.\w):(\d+):(\d+)\)$');
+      RegExp(r'^#(\d+) +(.+) +\(package:([^/]+)/(.+\.\w):(\d+):(\d+)\)$');
 
   Tracing(this.stackTrace) {
     final frames = stackTrace.toString().split("\n");

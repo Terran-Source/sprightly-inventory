@@ -20,10 +20,10 @@ final Map<Type, String> exceptionDisplay = {
       "The remote connection failed due to my precious Socket. {message}",
   SignalException: 'Some signal went wrong.  {message}',
   StdinException:
-      'Someone tried to give some input, that I couldn\'t understand. {message}',
-  StdoutException: 'Oops, I\'m unable to express my output. {message}',
+      "Someone tried to give some input, that I couldn't understand. {message}",
+  StdoutException: "Oops, I'm unable to express my output. {message}",
   ProcessException: 'Process went bad. {message}',
-  TlsException: 'It\'s the security protocol named TLS to blame. {message}',
+  TlsException: "It's the security protocol named TLS to blame. {message}",
 };
 
 class FormattedException<T extends Exception> {
@@ -58,10 +58,11 @@ class FormattedException<T extends Exception> {
     }
   }
 
-  Interpolation _interpolation = Interpolation();
+  final _interpolation = Interpolation();
 
   T get exception => _exception;
-  String get message => messageParams['message'] ?? _exception.toString();
+  String get message =>
+      messageParams['message']?.toString() ?? _exception.toString();
   Type get exceptionType => _exception.runtimeType;
 
   Type get _displayExceptionType =>
@@ -70,7 +71,7 @@ class FormattedException<T extends Exception> {
   String get _exceptionDisplayMessage =>
       exceptionDisplay[_displayExceptionType] ?? _defaultExceptionMessage;
 
-  String get logSource => '${appName}:${moduleName}';
+  String get logSource => '$appName:$moduleName';
   String get displayedMessage =>
       _interpolation.eval(_exceptionDisplayMessage, messageParams).trim();
 }

@@ -12,12 +12,12 @@ enum HashLibrary {
   sha256,
   sha384,
   sha512,
-  hmac_md5,
-  hmac_sha1,
-  hmac_sha224,
-  hmac_sha256,
-  hmac_sha384,
-  hmac_sha512
+  hmacMd5,
+  hmacSha1,
+  hmacSha224,
+  hmacSha256,
+  hmacSha384,
+  hmacSha512
 }
 
 final Random _random = Random.secure();
@@ -55,27 +55,27 @@ String hashedAll(
     case HashLibrary.sha512:
       chunks = sha512.startChunkedConversion(sink);
       break;
-    case HashLibrary.hmac_md5:
+    case HashLibrary.hmacMd5:
       final hmac = Hmac(md5, utf8Key);
       chunks = hmac.startChunkedConversion(sink);
       break;
-    case HashLibrary.hmac_sha1:
+    case HashLibrary.hmacSha1:
       final hmac = Hmac(sha1, utf8Key);
       chunks = hmac.startChunkedConversion(sink);
       break;
-    case HashLibrary.hmac_sha224:
+    case HashLibrary.hmacSha224:
       final hmac = Hmac(sha224, utf8Key);
       chunks = hmac.startChunkedConversion(sink);
       break;
-    case HashLibrary.hmac_sha256:
+    case HashLibrary.hmacSha256:
       final hmac = Hmac(sha256, utf8Key);
       chunks = hmac.startChunkedConversion(sink);
       break;
-    case HashLibrary.hmac_sha384:
+    case HashLibrary.hmacSha384:
       final hmac = Hmac(sha384, utf8Key);
       chunks = hmac.startChunkedConversion(sink);
       break;
-    case HashLibrary.hmac_sha512:
+    case HashLibrary.hmacSha512:
       final hmac = Hmac(sha512, utf8Key);
       chunks = hmac.startChunkedConversion(sink);
       break;
@@ -84,16 +84,19 @@ String hashedAll(
       chunks = sha1.startChunkedConversion(sink);
       break;
   }
-  byteChunks.forEach((bt) => chunks.add(bt));
+  for (final bt in byteChunks) {
+    chunks.add(bt);
+  }
   chunks.close();
   var result =
-      "${prefixLibrary ? library.toString().split(".").last.replaceAll("_", "") + ':' : ''}"
+      "${prefixLibrary ? '${library.toString().split(".").last}:' : ''}"
       "${sink.events.single}";
   if (null == hashLength) return result;
   if (result.length < hashLength) {
     result += _key;
-    if (result.length < hashLength)
+    if (result.length < hashLength) {
       result += randomString(hashLength - result.length);
+    }
   }
   return result.substring(0, hashLength);
 }
