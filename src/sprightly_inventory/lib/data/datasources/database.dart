@@ -28,8 +28,11 @@ class AppSettings extends Table {
 
   TextColumn get name => text().named('name').withLength(max: 50)();
   TextColumn get value => text().named('value')();
-  TextColumn get type => text().named('type').nullable().map(
-      const EnumTypeConverter<AppSettingType>(
+  TextColumn get type => text()
+      .named('type')
+      .nullable()
+      //.customConstraint(_typeConstraint)
+      .map(const EnumTypeConverter<AppSettingType>(
           AppSettingType.values, AppSettingType.String))();
   DateTimeColumn get createdOn => dateTime()
       .named('createdOn')
@@ -42,6 +45,9 @@ class AppSettings extends Table {
 
   @override
   Set<Column> get primaryKey => {name};
+
+  // String get _typeConstraint =>
+  //     'NULL ' + AppSettingType.values.getConstraints('type');
 }
 
 //#region Custom query & classes
