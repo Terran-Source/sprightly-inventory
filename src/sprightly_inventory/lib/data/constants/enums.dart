@@ -1,4 +1,4 @@
-Map<Type, List> enumTypes = {
+const Map<Type, List> enumTypes = {
   MemberIdType: MemberIdType.values,
   GroupType: GroupType.values,
   AccountType: AccountType.values,
@@ -16,7 +16,7 @@ Map<Type, List> enumTypes = {
 /// Database enums
 ///
 /// any changes here should be replicated manually in the
-/// models/db/database.dart file
+/// above [enumTypes] List
 /// as moor can't handle dynamic string in `customConstraint`
 ///
 /// otherwise, it'd be like

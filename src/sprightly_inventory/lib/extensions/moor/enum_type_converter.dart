@@ -1,7 +1,6 @@
 library marganam.extensions.moor;
 
 import 'package:moor/moor.dart';
-import 'package:sprightly_inventory/data/constants/enums.dart';
 
 import 'package:sprightly_inventory/extensions/enum_extensions.dart';
 
@@ -21,9 +20,10 @@ class EnumTypeConverter<T> extends TypeConverter<T, String> {
 }
 
 class ExtendedValueSerializer extends ValueSerializer {
+  final Map<Type, List> enumTypes;
   ValueSerializer get _defaultSerializer => const ValueSerializer.defaults();
 
-  const ExtendedValueSerializer();
+  const ExtendedValueSerializer(this.enumTypes);
 
   @override
   T fromJson<T>(dynamic json) {

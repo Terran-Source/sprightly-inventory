@@ -309,7 +309,7 @@ mixin _GenericDaoMixin<T extends GeneratedDatabase> on DatabaseAccessor<T> {
 //   @override
 //   Future<void> beforeOpen(OpeningDetails details, Migrator m) async {
 //     await getReady();
-//     moorRuntimeOptions.defaultSerializer = const ExtendedValueSerializer();
+//     moorRuntimeOptions.defaultSerializer = const ExtendedValueSerializer(enumTypes);
 //     if (details.wasCreated) {
 //       // TODO: do first time activity
 //       // creating default Group & Accounts
@@ -804,7 +804,8 @@ class SprightlySetupDao extends DatabaseAccessor<SprightlySetupDatabase>
   @override
   Future<void> beforeOpen(OpeningDetails details, Migrator m) async {
     await getReady();
-    moorRuntimeOptions.defaultSerializer = const ExtendedValueSerializer();
+    moorRuntimeOptions.defaultSerializer =
+        const ExtendedValueSerializer(enumTypes);
     if (details.wasCreated) {
       // TODO: do first time activity
       // already done through _queries.setupInitiation
