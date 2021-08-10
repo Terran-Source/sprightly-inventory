@@ -1,4 +1,4 @@
-library marganam.file_provider;
+library marganam.utils.file_provider;
 
 import 'dart:async';
 import 'dart:convert';

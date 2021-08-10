@@ -1,4 +1,4 @@
-library marganam.functional_execution;
+library marganam.utils.functional_execution;
 
 import 'dart:async';
 

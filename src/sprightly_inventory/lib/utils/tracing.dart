@@ -1,4 +1,4 @@
-library marganam.tracing;
+library marganam.utils.tracing;
 
 /// Get the parsed StackTrace
 ///

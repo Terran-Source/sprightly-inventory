@@ -1,4 +1,4 @@
-library marganam.app_settings;
+library marganam.utils.app_settings;
 
 import 'dart:async';
 // import 'dart:convert';

@@ -1,4 +1,4 @@
-library marganam.worker;
+library marganam.utils.worker;
 
 import 'dart:async';
 

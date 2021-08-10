@@ -1,4 +1,4 @@
-library marganam.functional_exception;
+library marganam.utils.functional_exception;
 
 import 'dart:developer';
 import 'dart:io';

@@ -1,3 +1,5 @@
+library marganam.extensions;
+
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart';

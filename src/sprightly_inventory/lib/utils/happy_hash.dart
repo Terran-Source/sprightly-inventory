@@ -1,4 +1,4 @@
-library marganam.crypto;
+library marganam.utils.crypto;
 
 import 'dart:convert';
 import 'dart:math';

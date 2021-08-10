@@ -1,3 +1,5 @@
+library marganam.extensions;
+
 extension Trimmer on String {
   String get escapedTrim => RegExp.escape(trim());
 

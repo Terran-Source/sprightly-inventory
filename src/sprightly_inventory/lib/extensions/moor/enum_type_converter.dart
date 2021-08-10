@@ -1,3 +1,5 @@
+library marganam.extensions.moor;
+
 import 'package:moor/moor.dart';
 import 'package:sprightly_inventory/data/constants/enums.dart';
 

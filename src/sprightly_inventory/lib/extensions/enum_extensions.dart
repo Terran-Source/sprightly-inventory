@@ -1,3 +1,5 @@
+library marganam.extensions;
+
 import 'dart:math';
 
 extension Enums<T> on List<T> {
