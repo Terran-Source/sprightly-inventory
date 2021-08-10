@@ -3,7 +3,8 @@ library marganam.extensions;
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart';
-import 'package:sprightly_inventory/extensions/string_extensions.dart';
+
+import 'string_extensions.dart';
 
 /// Updated from https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
 /// till 28th April, 2020 AC (After Corona) :P

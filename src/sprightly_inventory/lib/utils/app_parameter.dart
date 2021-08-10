@@ -4,7 +4,8 @@ import 'dart:async';
 // import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-// import 'package:sprightly_inventory/utils/file_provider.dart';
+
+// import 'file_provider.dart';
 
 class Parameter<T> {
   Parameter(this.name, this._value);

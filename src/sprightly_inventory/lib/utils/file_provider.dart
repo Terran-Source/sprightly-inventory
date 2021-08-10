@@ -10,11 +10,10 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
-import 'package:sprightly_inventory/extensions/file_system_entity_extensions.dart';
-import 'package:sprightly_inventory/extensions/http_response_extensions.dart';
-import 'package:sprightly_inventory/extensions/string_extensions.dart';
-import 'package:sprightly_inventory/utils/formatted_exception.dart';
-import 'package:sprightly_inventory/utils/ready_or_not.dart';
+import 'package:sprightly_inventory/extensions/extensions.dart';
+
+import 'formatted_exception.dart';
+import 'ready_or_not.dart';
 
 String get _moduleName => 'file_provider';
 

@@ -2,16 +2,13 @@ library sprightly.moor_database;
 
 import 'dart:async';
 
-// import 'package:flutter/foundation.dart';
-import 'package:moor/moor.dart';
 import 'package:moor/ffi.dart';
-import 'package:sprightly_inventory/data/constants/enums.dart';
-import 'package:sprightly_inventory/data/dao.dart';
-import 'package:sprightly_inventory/extensions/moor/enum_type_converter.dart';
-import 'package:sprightly_inventory/extensions/enum_extensions.dart';
-import 'package:sprightly_inventory/utils/file_provider.dart';
-import 'package:sprightly_inventory/utils/happy_hash.dart';
-import 'package:sprightly_inventory/utils/ready_or_not.dart';
+import 'package:moor/moor.dart';
+import 'package:sprightly_inventory/extensions/extensions.dart';
+import 'package:sprightly_inventory/utils/utils.dart';
+
+import '../constants/enums.dart';
+import '../dao.dart';
 
 part 'database.g.dart';
 

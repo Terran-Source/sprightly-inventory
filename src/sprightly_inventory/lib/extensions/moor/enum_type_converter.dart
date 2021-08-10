@@ -2,7 +2,7 @@ library marganam.extensions.moor;
 
 import 'package:moor/moor.dart';
 
-import 'package:sprightly_inventory/extensions/enum_extensions.dart';
+import '../enum_extensions.dart';
 
 class EnumTypeConverter<T> extends TypeConverter<T, String> {
   final List<T> _values;

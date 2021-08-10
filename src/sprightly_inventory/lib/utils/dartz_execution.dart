@@ -3,7 +3,8 @@ library marganam.utils.functional_execution;
 import 'dart:async';
 
 import 'package:dartz/dartz.dart';
-import 'package:sprightly_inventory/utils/formatted_exception.dart';
+
+import 'formatted_exception.dart';
 
 class DartzExecution {
   static Future<Either<FormattedException, Right>> callEither<Right>(
