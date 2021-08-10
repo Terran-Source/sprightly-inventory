@@ -8,7 +8,7 @@ const Map<Type, List> enumTypes = {
   FontType: FontType.values,
   FontStyle: FontStyle.values,
   ThemeMode: ThemeMode.values,
-  AppSettingType: AppSettingType.values,
+  PropertyType: PropertyType.values,
   ResourceFrom: ResourceFrom.values,
   Environment: Environment.values,
 };
@@ -29,7 +29,7 @@ const Map<Type, List> enumTypes = {
 /// ```
 /// for `Members`.`idType`
 
-enum MemberIdType { Phone, Email, NickName, Group, GroupMember }
+enum MemberIdType { Phone, Email, NickName, Custom }
 enum GroupType { Personal, Budget, Shared }
 enum AccountType { Group, Cash, Credit, Bank, Investment }
 enum CategoryType { Expense, Liability, Income, Investment, Misc }
@@ -57,7 +57,7 @@ enum GroupActivityType {
 enum FontType { Regular, Mono }
 enum FontStyle { Regular, Italic, Bold, BoldItalic }
 enum ThemeMode { Bright, Dark }
-enum AppSettingType { String, Number, Bool, List, AppInfo, ThemeMode }
+enum PropertyType { String, Number, Bool, DateTime, Blob, List }
 
 //
 enum ResourceFrom { Asset, Web }

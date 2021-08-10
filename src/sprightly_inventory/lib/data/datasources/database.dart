@@ -18,6 +18,62 @@ String get sqlAssetDirectory => 'assets/queries_min';
 int get hashedIdMinLength => 16;
 int get uniqueRetry => 5;
 
+// #region Sprightly tables
+@DataClassName("Member")
+class Members extends Table {
+  @override
+  String get tableName => "Member";
+
+  TextColumn get id => text().named('id').withLength(min: 16)();
+  TextColumn get name => text().named('name').withLength(max: 500)();
+  TextColumn get avatar => text().named('avatar').nullable()();
+  TextColumn get idType => text()
+      .named('idType')
+      .nullable()
+      .map(const EnumTypeConverter<MemberIdType>(MemberIdType.values))();
+  TextColumn get idValue =>
+      text().named('idValue').nullable().withLength(max: 50)();
+  TextColumn get signature => text().named('signature').nullable()();
+  DateTimeColumn get createdOn => dateTime()
+      .named('createdOn')
+      .clientDefault(() => DateTime.now().toUtc())
+      .customConstraint("NOT NULL DEFAULT (STRFTIME('%s','now'))")();
+  DateTimeColumn get updatedOn => dateTime()
+      .named('updatedOn')
+      .nullable()
+      .clientDefault(() => DateTime.now().toUtc())();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
+@DataClassName("CustomProperty")
+class CustomProperties extends Table {
+  @override
+  String get tableName => "CustomProperty";
+
+  TextColumn get id => text().named('id').withLength(min: 16)();
+  TextColumn get parent => text().named('parent').withLength(min: 50)();
+  TextColumn get parentId => text().named('parentId').withLength(min: 16)();
+  TextColumn get propertyType => text()
+      .named('propertyType')
+      .map(const EnumTypeConverter<PropertyType>(PropertyType.values))();
+  TextColumn get name => text().named('name').withLength(max: 250)();
+  DateTimeColumn get createdOn => dateTime()
+      .named('createdOn')
+      .clientDefault(() => DateTime.now().toUtc())
+      .customConstraint("NOT NULL DEFAULT (STRFTIME('%s','now'))")();
+  DateTimeColumn get updatedOn => dateTime()
+      .named('updatedOn')
+      .nullable()
+      .clientDefault(() => DateTime.now().toUtc())();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+// #endregion Sprightly tables
+
+// #region SprightlySetup tables
 @DataClassName("AppSetting")
 class AppSettings extends Table {
   @override
@@ -29,8 +85,8 @@ class AppSettings extends Table {
       .named('type')
       .nullable()
       //.customConstraint(_typeConstraint)
-      .map(const EnumTypeConverter<AppSettingType>(
-          AppSettingType.values, AppSettingType.String))();
+      .map(const EnumTypeConverter<PropertyType>(
+          PropertyType.values, PropertyType.String))();
   DateTimeColumn get createdOn => dateTime()
       .named('createdOn')
       .clientDefault(() => DateTime.now().toUtc())
@@ -44,10 +100,11 @@ class AppSettings extends Table {
   Set<Column> get primaryKey => {name};
 
   // String get _typeConstraint =>
-  //     'NULL ' + AppSettingType.values.getConstraints('type');
+  //     'NULL ' + PropertyType.values.getConstraints('type');
 }
+// #endregion SprightlySetup tables
 
-//#region Custom query & classes
+// #region Custom query & classes
 /// asset path for custom sql files
 Future<String> _getSqlQueryFromAsset(String fileName) =>
     getAssetText(fileName, assetDirectory: sqlAssetDirectory);
@@ -263,64 +320,68 @@ mixin _GenericDaoMixin<T extends GeneratedDatabase> on DatabaseAccessor<T> {
           TableInfo<Tbl, R> table, Insertable<R> record) =>
       delete(table).delete(record);
 }
-//#endregion Custom query & classes
+// #endregion Custom query & classes
 
-// @UseDao(
-//   tables: [
-//     Members,
-//     Groups,
-//     GroupMembers,
-//     Accounts,
-//     Categories,
-//     Settlements,
-//     Transactions
-//   ],
-// )
-// class SprightlyDao extends DatabaseAccessor<SprightlyDatabase>
-//     with _$SprightlyDaoMixin, _GenericDaoMixin, ReadyOrNotMixin
-//     implements SystemDao {
-//   SprightlyDao(SprightlyDatabase _db) : super(_db) {
-//     getReadyWorker = _getReady;
-//   }
-//
-//   @override
-//   bool get ready => super._daoMixinReady && super.ready;
-//
-//   Future _getReady() async {
-//     await super._getDaoMixinReady();
-//     _sharedGroupList = await getGroups(GroupType.Shared);
-//   }
-//
-//   @override
-//   Future<void> onCreate(Migrator m) async {
-//     await super.onCreate(m);
-//     await super.customStatement(await _queries.dataInitiation.load() ?? '');
-//   }
-//
-//   @override
-//   Future<void> onUpgrade(Migrator m, int from, int to) async {
-//     for (var i = from; i < to; i++)
-//     await super.customStatement(await _queries.dataMigrations[i]!.load() ?? '');
-//   }
-//
-//   @override
-//   Future<void> beforeOpen(OpeningDetails details, Migrator m) async {
-//     await getReady();
-//     moorRuntimeOptions.defaultSerializer = const ExtendedValueSerializer(enumTypes);
-//     if (details.wasCreated) {
-//       // TODO: do first time activity
-//       // creating default Group & Accounts
-//       var defaultGroup = await createGroup('Sprightly Default',
-//           type: GroupType.Personal, isHidden: true);
-//       await addAccount('Cash', defaultGroup.id, type: AccountType.Cash);
-//       await addAccount('Bank Accounts', defaultGroup.id,
-//           type: AccountType.Bank);
-//       await addAccount('Credit Cards', defaultGroup.id,
-//           type: AccountType.Credit);
-//       await addAccount('Investments', defaultGroup.id,
-//           type: AccountType.Investment);
-//     }
-//   }
+@UseDao(
+  tables: [
+    Members,
+    CustomProperties,
+    // Groups,
+    // GroupMembers,
+    // Accounts,
+    // Categories,
+    // Settlements,
+    // Transactions
+  ],
+)
+class SprightlyDao extends DatabaseAccessor<SprightlyDatabase>
+    with _$SprightlyDaoMixin, _GenericDaoMixin, ReadyOrNotMixin
+    implements SystemDao {
+  SprightlyDao(SprightlyDatabase _db) : super(_db) {
+    getReadyWorker = _getReady;
+  }
+
+  @override
+  bool get ready => super._daoMixinReady && super.ready;
+
+  Future _getReady() async {
+    await super._getDaoMixinReady();
+    // _sharedGroupList = await getGroups(GroupType.Shared);
+  }
+
+  @override
+  Future<void> onCreate(Migrator m) async {
+    await super.onCreate(m);
+    await super.customStatement(await _queries.dataInitiation.load() ?? '');
+  }
+
+  @override
+  Future<void> onUpgrade(Migrator m, int from, int to) async {
+    for (var i = from; i < to; i++) {
+      await super
+          .customStatement(await _queries.dataMigrations[i]!.load() ?? '');
+    }
+  }
+
+  @override
+  Future<void> beforeOpen(OpeningDetails details, Migrator m) async {
+    await getReady();
+    moorRuntimeOptions.defaultSerializer =
+        const ExtendedValueSerializer(enumTypes);
+    if (details.wasCreated) {
+      // TODO: do first time activity
+      //// creating default Group & Accounts
+      // var defaultGroup = await createGroup('Sprightly Default',
+      //     type: GroupType.Personal, isHidden: true);
+      // await addAccount('Cash', defaultGroup.id, type: AccountType.Cash);
+      // await addAccount('Bank Accounts', defaultGroup.id,
+      //     type: AccountType.Bank);
+      // await addAccount('Credit Cards', defaultGroup.id,
+      //     type: AccountType.Credit);
+      // await addAccount('Investments', defaultGroup.id,
+      //     type: AccountType.Investment);
+    }
+  }
 //
 //   Future<List<Category>> getCategories() => select(categories).get();
 //   Future<List<Account>> getAccounts() => select(accounts).get();
@@ -354,34 +415,31 @@ mixin _GenericDaoMixin<T extends GeneratedDatabase> on DatabaseAccessor<T> {
 //
 //   Future<bool> memberWithNameExists(String name) =>
 //       recordWithColumnValueExists(members.actualTableName, 'name', name);
-//
-//   Future<Member> getMember(String memberId) async =>
-//       Member.fromJson(await getRecord(members.actualTableName, memberId));
-//
-//   Future<Member> addMember(String idValue,
-//       {String id,
-//       String name,
-//       String nickName,
-//       String avatar,
-//       MemberIdType idType,
-//       String secondaryIdValue,
-//       bool isGroupExpense = false,
-//       String signature}) async {
-//     if (null != id) id = await _uniqueId(members.actualTableName, [idValue]);
-//     var membersComp = MembersCompanion.insert(
-//         id: id,
-//         name: Value(name),
-//         nickName: Value(nickName),
-//         avatar: Value(avatar),
-//         idType: idType,
-//         idValue: idValue,
-//         secondaryIdValue: Value(secondaryIdValue),
-//         isGroupExpense: Value(isGroupExpense),
-//         signature: Value(signature));
-//     await into(members).insert(membersComp);
-//     return getMember(id);
-//   }
-//
+
+  @override
+  Future<Member> getMember(String memberId) async =>
+      Member.fromJson(await getRecord(members.actualTableName, memberId));
+
+  @override
+  Future<Member?> addMember(String idValue, String name,
+      {String? id,
+      String? avatar,
+      MemberIdType idType = MemberIdType.NickName,
+      String? signature}) async {
+    final _id = id ?? await _uniqueId(members.actualTableName, [idValue]);
+    final membersComp = MembersCompanion.insert(
+        id: _id,
+        name: name,
+        avatar: Value(avatar),
+        idType: Value(idType),
+        idValue: Value(idValue),
+        signature: Value(signature));
+    if (await into(members).insert(membersComp) > 0) {
+      return getMember(_id);
+    }
+    return null;
+  }
+
 //   Future<Member> addGroupMember(String groupId, String idValue,
 //       {String id,
 //       String name,
@@ -422,32 +480,32 @@ mixin _GenericDaoMixin<T extends GeneratedDatabase> on DatabaseAccessor<T> {
 //     await into(groupMembers).insert(groupMembersComp);
 //     return member;
 //   }
-//
-//   Future<Member> updateMember(String memberId,
-//       {String name,
-//       String nickName,
-//       String avatar,
-//       MemberIdType idType,
-//       String idValue,
-//       String secondaryIdValue,
-//       String signature}) async {
-//     var member = await getMember(memberId);
-//     member.copyWith(
-//         name: name,
-//         nickName: nickName,
-//         avatar: avatar,
-//         idType: idType,
-//         idValue: idValue,
-//         secondaryIdValue: secondaryIdValue,
-//         signature: signature,
-//         updatedOn: DateTime.now().toUtc());
-//     await updateRecord(members, member);
-//     return getMember(memberId);
-//   }
-//
-//   Future<int> deleteMember(String memberId) =>
-//       deleteRecord(members, MembersCompanion(id: Value(memberId)));
-//
+
+  @override
+  Future<Member?> updateMember(String id,
+      {String? name,
+      String? avatar,
+      MemberIdType? idType,
+      String? idValue,
+      String? signature}) async {
+    final existing = await getMember(id);
+    final updated = existing.copyWith(
+        name: name,
+        avatar: avatar,
+        idType: idType,
+        idValue: idValue,
+        signature: signature,
+        updatedOn: DateTime.now().toUtc());
+    if (await updateRecord(members, updated)) {
+      return getMember(id);
+    }
+    return null;
+  }
+
+  @override
+  Future<int> deleteMember(String id) =>
+      deleteRecord(members, MembersCompanion(id: Value(id)));
+
 //   Future<int> deleteMemberFromGroup(String memberId, String groupId) async {
 //     var groupMember = await (select(groupMembers)
 //           ..where((gm) =>
@@ -754,7 +812,7 @@ mixin _GenericDaoMixin<T extends GeneratedDatabase> on DatabaseAccessor<T> {
 //     _sharedGroupList = await getGroups(GroupType.Shared);
 //     return result;
 //   }
-// }
+}
 
 @UseDao(
   tables: [
@@ -840,14 +898,14 @@ class SprightlySetupDao extends DatabaseAccessor<SprightlySetupDatabase>
 
   @override
   Future<bool> updateAppSetting(String name, String value,
-      {AppSettingType? type, bool batchOperation = false}) async {
-    final existingAppSetting = await getAppSetting(name);
-    final updatedAppSetting = existingAppSetting.copyWith(
+      {PropertyType? type, bool batchOperation = false}) async {
+    final existing = await getAppSetting(name);
+    final updated = existing.copyWith(
       value: value,
       type: type,
       updatedOn: DateTime.now().toUtc(),
     );
-    final result = updateRecord(appSettings, updatedAppSetting);
+    final result = updateRecord(appSettings, updated);
     if (!batchOperation) _allAppSettings = await getAppSettings();
     return result;
   }
@@ -886,43 +944,44 @@ LazyDatabase _openConnection(
           logStatements: logStatements,
         ));
 
-// @UseMoor(
-//   tables: [
-//     Members,
-//     Groups,
-//     GroupMembers,
-//     Accounts,
-//     Categories,
-//     Settlements,
-//     Transactions,
-//   ],
-//   daos: [SprightlyDao],
-// )
-// class SprightlyDatabase extends _$SprightlyDatabase {
-//   bool enableDebug;
-//   bool recreateDatabase;
-//   SprightlyDatabase({
-//     this.enableDebug = false,
-//     this.recreateDatabase = false,
-//   }) : super(_openConnection(
-//           appDataDbFile,
-//           logStatements: enableDebug,
-//           recreateDatabase: recreateDatabase,
-//         ));
-//
-//   @override
-//   int get schemaVersion => 1;
-//
-//   @override
-//   MigrationStrategy get migration => MigrationStrategy(
-//         onCreate: sprightlyDao.onCreate,
-//         onUpgrade: sprightlyDao.onUpgrade,
-//         beforeOpen: (OpeningDetails details) async {
-//           Migrator m = this.createMigrator();
-//           await sprightlyDao.beforeOpen(details, m);
-//         },
-//       );
-// }
+@UseMoor(
+  tables: [
+    Members,
+    CustomProperties
+    // Groups,
+    // GroupMembers,
+    // Accounts,
+    // Categories,
+    // Settlements,
+    // Transactions,
+  ],
+  daos: [SprightlyDao],
+)
+class SprightlyDatabase extends _$SprightlyDatabase {
+  bool enableDebug;
+  bool recreateDatabase;
+  SprightlyDatabase({
+    this.enableDebug = false,
+    this.recreateDatabase = false,
+  }) : super(_openConnection(
+          appDataDbFile,
+          logStatements: enableDebug,
+          recreateDatabase: recreateDatabase,
+        ));
+
+  @override
+  int get schemaVersion => 1;
+
+  @override
+  MigrationStrategy get migration => MigrationStrategy(
+        onCreate: sprightlyDao.onCreate,
+        onUpgrade: sprightlyDao.onUpgrade,
+        beforeOpen: (OpeningDetails details) async {
+          final m = createMigrator();
+          await sprightlyDao.beforeOpen(details, m);
+        },
+      );
+}
 
 @UseMoor(
   tables: [

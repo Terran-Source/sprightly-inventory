@@ -43,16 +43,12 @@ abstract class SystemDao extends AppDao {
   // Future<List<Member>> getGroupOnlyMembers(String groupId);
   // Stream<List<Member>> watchGroupOnlyMembers(String groupId);
   // Future<bool> memberWithNameExists(String name);
-  // Future<Member> getMember(String memberId);
-  // Future<Member> addMember(String idValue,
-  //     {String id,
-  //     String name,
-  //     String nickName,
-  //     String avatar,
-  //     MemberIdType idType,
-  //     String secondaryIdValue,
-  //     bool isGroupExpense = false,
-  //     String signature});
+  Future<Member> getMember(String memberId);
+  Future<Member?> addMember(String idValue, String name,
+      {String? id,
+      String? avatar,
+      MemberIdType idType = MemberIdType.NickName,
+      String? signature});
   // Future<Member> addGroupMember(String groupId, String idValue,
   //     {String id,
   //     String name,
@@ -62,15 +58,13 @@ abstract class SystemDao extends AppDao {
   //     String secondaryIdValue,
   //     bool isGroupExpense = false,
   //     String signature});
-  // Future<Member> updateMember(String memberId,
-  //     {String name,
-  //     String nickName,
-  //     String avatar,
-  //     MemberIdType idType,
-  //     String idValue,
-  //     String secondaryIdValue,
-  //     String signature});
-  // Future<int> deleteMember(String memberId);
+  Future<Member?> updateMember(String id,
+      {String? name,
+      String? avatar,
+      MemberIdType? idType,
+      String? idValue,
+      String? signature});
+  Future<int> deleteMember(String id);
   // Future<int> deleteMemberFromGroup(String memberId, String groupId);
 
   // Future<List<Settlement>> getGroupSettlements(String groupId,
@@ -173,8 +167,7 @@ abstract class SettingsDao extends AppDao {
   Future<List<AppSetting>> getAppSettings();
   Stream<List<AppSetting>> watchAppSettings();
   Future<AppSetting> getAppSetting(String name);
-  Future<bool> updateAppSetting(String name, String value,
-      {AppSettingType type});
+  Future<bool> updateAppSetting(String name, String value, {PropertyType type});
   Future<bool> updateAppSettings(Map<String, String> settings);
 
   // Future<List<AppFont>> getAppFonts();
