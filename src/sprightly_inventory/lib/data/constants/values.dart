@@ -12,7 +12,7 @@ class AppSettingNames {
   String get buildNumber => 'buildNumber';
 
   // Debug related
-  Environment get environment => Environment.Development;
+  Environment get environment => Environment.dev;
   bool get debug => false;
 
   // database related
@@ -22,5 +22,5 @@ class AppSettingNames {
   String get primarySetupComplete => 'primarySetupComplete';
 
   // Themes
-  ThemeMode get themeMode => ThemeMode.Bright;
+  ThemeMode get themeMode => ThemeMode.Dark;
 }

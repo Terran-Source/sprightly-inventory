@@ -62,4 +62,4 @@ enum PropertyType { String, Number, Bool, DateTime, Blob, List }
 //
 enum ResourceFrom { Asset, Web }
 
-enum Environment { Development, Staging, Production }
+enum Environment { dev, stage, prod }
