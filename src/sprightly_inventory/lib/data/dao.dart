@@ -15,7 +15,7 @@ abstract class AppDao {
   FutureOr getReady();
 }
 
-class AppInformation with ReadyOrNotMixin<PackageInfo> {
+class AppInformation with ReadyOrNotMixin<PackageInfo> implements Initiated {
   factory AppInformation() => _cache;
 
   static final _cache = AppInformation._();
@@ -23,6 +23,9 @@ class AppInformation with ReadyOrNotMixin<PackageInfo> {
   AppInformation._() {
     getReadyWorker = () async => packageInfo = await PackageInfo.fromPlatform();
   }
+
+  @override
+  FutureOr initiate() => getReady();
 
   late PackageInfo packageInfo;
 

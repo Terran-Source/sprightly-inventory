@@ -957,7 +957,8 @@ LazyDatabase _openConnection(
   ],
   daos: [SprightlyDao],
 )
-class SprightlyDatabase extends _$SprightlyDatabase {
+class SprightlyDatabase extends _$SprightlyDatabase
+    implements Initiated, Disposable<bool> {
   bool enableDebug;
   bool recreateDatabase;
   SprightlyDatabase({
@@ -968,6 +969,12 @@ class SprightlyDatabase extends _$SprightlyDatabase {
           logStatements: enableDebug,
           recreateDatabase: recreateDatabase,
         ));
+
+  @override
+  FutureOr initiate() async {
+    await executor.ensureOpen(attachedDatabase);
+    await sprightlyDao.getReady();
+  }
 
   @override
   int get schemaVersion => 1;
@@ -981,6 +988,11 @@ class SprightlyDatabase extends _$SprightlyDatabase {
           await sprightlyDao.beforeOpen(details, m);
         },
       );
+
+  @override
+  FutureOr dispose([bool? flag]) async {
+    await close();
+  }
 }
 
 @UseMoor(
@@ -992,7 +1004,8 @@ class SprightlyDatabase extends _$SprightlyDatabase {
   ],
   daos: [SprightlySetupDao],
 )
-class SprightlySetupDatabase extends _$SprightlySetupDatabase {
+class SprightlySetupDatabase extends _$SprightlySetupDatabase
+    implements Initiated, Disposable<bool> {
   bool enableDebug;
   bool recreateDatabase;
   SprightlySetupDatabase({
@@ -1003,6 +1016,12 @@ class SprightlySetupDatabase extends _$SprightlySetupDatabase {
           logStatements: enableDebug,
           recreateDatabase: recreateDatabase,
         ));
+
+  @override
+  FutureOr initiate() async {
+    await executor.ensureOpen(attachedDatabase);
+    await sprightlySetupDao.getReady();
+  }
 
   @override
   int get schemaVersion => 1;
@@ -1016,4 +1035,9 @@ class SprightlySetupDatabase extends _$SprightlySetupDatabase {
           await sprightlySetupDao.beforeOpen(details, m);
         },
       );
+
+  @override
+  FutureOr dispose([bool? flag]) async {
+    await close();
+  }
 }
