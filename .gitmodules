@@ -1,0 +1,3 @@
+[submodule "dart-marganam"]
+	path = src/dart_marganam
+	url = git@github.com:Terran-Source/dart-marganam-packages.git
