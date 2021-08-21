@@ -2,10 +2,10 @@ library sprightly.moor_database;
 
 import 'dart:async';
 
+import 'package:dart_marganam/extensions.dart';
+import 'package:dart_marganam/utils.dart';
 import 'package:moor/ffi.dart';
 import 'package:moor/moor.dart';
-import 'package:sprightly_inventory/extensions/extensions.dart';
-import 'package:sprightly_inventory/utils/utils.dart';
 
 import '../constants/enums.dart';
 import '../dao.dart';

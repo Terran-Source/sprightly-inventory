@@ -20,6 +20,10 @@ dependencies:
   # Look & Feel
   cupertino_icons: ^1.0.3
 
+  # submodule
+  dart_marganam:
+    path: ../dart_marganam
+
   # Functional programming
   dartz: ^0.10.0-nullsafety.2
 
@@ -51,7 +55,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   json_serializable: ^4.1.4
-  lint: ^1.5.3
+  lint: ^1.6.0
   mockito: ^5.0.14
   moor_generator: ^4.4.1
 

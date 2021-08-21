@@ -2,8 +2,8 @@ library sprightly.dao;
 
 import 'dart:async';
 
+import 'package:dart_marganam/utils.dart';
 import 'package:package_info/package_info.dart';
-import 'package:sprightly_inventory/utils/utils.dart';
 
 import 'constants/enums.dart';
 import 'datasources/database.dart';
