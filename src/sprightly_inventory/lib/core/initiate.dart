@@ -28,8 +28,8 @@ Future<bool> initiate([Environment environment = Environment.prod]) async {
 
     kiwiContainer.registerSingleton((container) => initiates,
         name: constants.initiates);
-    for (final initiate in initiates) {
-      await initiate.initiate();
+    for (final initiator in initiates) {
+      await initiator.initiate();
     }
 
     // final appDetails = kiwiContainer<AppDetails>();
