@@ -1,3 +1,4 @@
+import 'constants.dart' as constants;
 import 'enums.dart';
 
 class AppSettingNames {
@@ -6,10 +7,10 @@ class AppSettingNames {
   const AppSettingNames._();
 
   // App Information
-  String get appName => 'appName';
-  String get packageName => 'packageName';
-  String get version => 'version';
-  String get buildNumber => 'buildNumber';
+  String get appName => constants.appNameSetting;
+  String get packageName => constants.packageNameSetting;
+  String get version => constants.versionSetting;
+  String get buildNumber => constants.buildNumberSetting;
 
   // Debug related
   Environment get environment => Environment.dev;
@@ -19,7 +20,7 @@ class AppSettingNames {
   double get dbVersion => 1.0;
 
   // database AppSettings
-  String get primarySetupComplete => 'primarySetupComplete';
+  String get primarySetupComplete => constants.setupCompleteSetting;
 
   // Themes
   ThemeMode get themeMode => ThemeMode.Dark;

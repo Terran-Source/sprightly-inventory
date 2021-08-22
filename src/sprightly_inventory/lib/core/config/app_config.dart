@@ -7,19 +7,19 @@ import 'package:dart_marganam/utils.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:path/path.dart' as p;
-import 'package:sprightly_inventory/data/constants/enums.dart';
+import 'package:sprightly_inventory/core/config/enums.dart';
 
 part 'app_config.g.dart';
 
 @JsonSerializable()
 class AppConfig extends Equatable {
+  const AppConfig({this.debug = false, this.recreateDatabase = false});
+
   final bool debug;
   final bool recreateDatabase;
 
   @override
   List<Object> get props => [debug, recreateDatabase];
-
-  const AppConfig({this.debug = false, this.recreateDatabase = false});
 
   factory AppConfig.fromJson(Map<String, dynamic> json) =>
       _$AppConfigFromJson(json);
@@ -38,8 +38,8 @@ class AppConfig extends Equatable {
     }
   }
 
-  static Future<AppConfig> from(
-      [Environment environment = Environment.prod]) async {
+  static Future<AppConfig> of(
+      {Environment environment = Environment.prod}) async {
     var json = await _jsonMap(_configBaseFile);
     final envConfigFile = "${[
       p.basenameWithoutExtension(_configBaseFile),

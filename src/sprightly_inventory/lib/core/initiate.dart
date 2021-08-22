@@ -2,16 +2,17 @@ import 'package:dart_marganam/utils.dart';
 import 'package:kiwi/kiwi.dart';
 import 'package:sprightly_inventory/core/config/app_config.dart';
 import 'package:sprightly_inventory/core/config/constants.dart' as constants;
+import 'package:sprightly_inventory/core/config/enums.dart';
 import 'package:sprightly_inventory/core/widgets/error_popup.dart';
-import 'package:sprightly_inventory/data/constants/enums.dart';
-import 'package:sprightly_inventory/data/initiate.dart' as db;
+import 'package:sprightly_inventory/data/initiate.dart' as data;
 
-Future<bool> initiate([Environment environment = Environment.prod]) async {
+Future<bool> initiate({Environment environment = Environment.prod}) async {
   try {
     final initiates = <Initiated>[];
     final kiwiContainer = KiwiContainer();
 
-    final configurations = await AppConfig.from(environment);
+    final configurations = await AppConfig.of(environment: environment);
+    kiwiContainer.registerSingleton((container) => configurations);
 
     initiates.add(ExceptionPackage());
 
@@ -20,14 +21,14 @@ Future<bool> initiate([Environment environment = Environment.prod]) async {
     initiates.add(remoteFileCache);
 
     // initiate database
-    initiates.addAll(await db.initiate(kiwiContainer,
+    initiates.addAll(await data.initiate(kiwiContainer,
         environment: environment, configurations: configurations));
 
     // await settingsInitiate.initiate(kiwiContainer,
     //     environment: environment, configurations: configurations);
 
     kiwiContainer.registerSingleton((container) => initiates,
-        name: constants.initiates);
+        name: constants.coreInitiates);
     for (final initiator in initiates) {
       await initiator.initiate();
     }

@@ -1,13 +1,13 @@
 import 'package:dart_marganam/utils.dart';
 import 'package:kiwi/kiwi.dart';
 import 'package:sprightly_inventory/core/config/app_config.dart';
-import 'package:sprightly_inventory/data/constants/enums.dart';
+import 'package:sprightly_inventory/core/config/enums.dart';
 import 'package:sprightly_inventory/data/dao.dart';
 import 'package:sprightly_inventory/data/datasources/database.dart' as db;
 
 Future<Iterable<Initiated>> initiate(
   KiwiContainer kiwiContainer, {
-  Environment? environment,
+  Environment environment = Environment.prod,
   AppConfig configurations = const AppConfig(),
 }) async {
   final result = <Initiated>[];

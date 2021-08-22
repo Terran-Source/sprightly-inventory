@@ -6,8 +6,8 @@ import 'package:dart_marganam/extensions.dart';
 import 'package:dart_marganam/utils.dart';
 import 'package:moor/ffi.dart';
 import 'package:moor/moor.dart';
+import 'package:sprightly_inventory/core/config/enums.dart';
 
-import '../constants/enums.dart';
 import '../dao.dart';
 
 part 'database.g.dart';
