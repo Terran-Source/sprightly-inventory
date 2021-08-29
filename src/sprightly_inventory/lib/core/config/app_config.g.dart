@@ -8,12 +8,45 @@ part of sprightly.config;
 
 AppConfig _$AppConfigFromJson(Map<String, dynamic> json) {
   return AppConfig(
-    debug: json['debug'] as bool,
-    recreateDatabase: json['recreateDatabase'] as bool,
+    dbConfig: json['dbConfig'] == null
+        ? null
+        : DbConfig.fromJson(json['dbConfig'] as Map<String, dynamic>),
+    debug: json['debug'] as bool?,
+    recreateDatabase: json['recreateDatabase'] as bool?,
   );
 }
 
-Map<String, dynamic> _$AppConfigToJson(AppConfig instance) => <String, dynamic>{
-      'debug': instance.debug,
-      'recreateDatabase': instance.recreateDatabase,
+Map<String, dynamic> _$AppConfigToJson(AppConfig instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('dbConfig', AppConfig._dbConfigToJson(instance.dbConfig));
+  val['debug'] = instance.debug;
+  val['recreateDatabase'] = instance.recreateDatabase;
+  return val;
+}
+
+DbConfig _$DbConfigFromJson(Map<String, dynamic> json) {
+  return DbConfig(
+    appDataDbFile: json['appDataDbFile'] as String?,
+    setupDataDbFile: json['setupDataDbFile'] as String?,
+    sqlSourceAsset: json['sqlSourceAsset'] as String?,
+    sqlSourceWeb: json['sqlSourceWeb'] as String?,
+    hashedIdMinLength: json['hashedIdMinLength'] as int?,
+    uniqueRetry: json['uniqueRetry'] as int?,
+  );
+}
+
+Map<String, dynamic> _$DbConfigToJson(DbConfig instance) => <String, dynamic>{
+      'appDataDbFile': instance.appDataDbFile,
+      'setupDataDbFile': instance.setupDataDbFile,
+      'sqlSourceAsset': instance.sqlSourceAsset,
+      'sqlSourceWeb': instance.sqlSourceWeb,
+      'hashedIdMinLength': instance.hashedIdMinLength,
+      'uniqueRetry': instance.uniqueRetry,
     };

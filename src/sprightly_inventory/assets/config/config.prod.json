@@ -1,4 +1,8 @@
 {
-  "debug": false,
-  "recreateDatabase": false
+  "dbConfig": {
+    "appDataDbFile": "sprightly_inventory_db.lite",
+    "setupDataDbFile": "sprightly_setup.lite",
+    "sqlSourceAsset": "assets/queries_min",
+    "sqlSourceWeb": "{sqlSourceWeb}"
+  }
 }

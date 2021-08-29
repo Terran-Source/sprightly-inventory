@@ -1,16 +1,17 @@
 import 'package:dart_marganam/utils.dart';
 import 'package:kiwi/kiwi.dart';
-import 'package:sprightly_inventory/core/config/app_config.dart';
+// import 'package:sprightly_inventory/core/config/app_config.dart';
 import 'package:sprightly_inventory/core/config/constants.dart' as constants;
 import 'package:sprightly_inventory/core/config/enums.dart';
 import 'package:sprightly_inventory/core/widgets/error_popup.dart';
 
 Future<bool> dispose({
   Environment environment = Environment.prod,
-  AppConfig configurations = const AppConfig(),
 }) async {
   try {
     final kiwiContainer = KiwiContainer();
+
+    // final configurations = kiwiContainer.resolve<AppConfig>();
 
     final List<Initiated> initiates =
         kiwiContainer.resolve<List<Initiated>>(constants.coreInitiates);

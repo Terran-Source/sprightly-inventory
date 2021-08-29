@@ -1,6 +1,7 @@
 library sprightly.config;
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dart_marganam/extensions.dart';
 import 'package:dart_marganam/utils.dart';
@@ -13,18 +14,33 @@ part 'app_config.g.dart';
 
 @JsonSerializable()
 class AppConfig extends Equatable {
-  const AppConfig({this.debug = false, this.recreateDatabase = false});
+  const AppConfig({
+    this.dbConfig,
+    this.debug,
+    this.recreateDatabase,
+  });
 
-  final bool debug;
-  final bool recreateDatabase;
+  @JsonKey(
+    includeIfNull: false,
+    toJson: _dbConfigToJson,
+  )
+  final DbConfig? dbConfig;
+  final bool? debug;
+  final bool? recreateDatabase;
 
   @override
-  List<Object> get props => [debug, recreateDatabase];
+  List<Object?> get props => [
+        dbConfig,
+        debug,
+        recreateDatabase,
+      ];
 
   factory AppConfig.fromJson(Map<String, dynamic> json) =>
       _$AppConfigFromJson(json);
-
   Map<String, dynamic> get toJson => _$AppConfigToJson(this);
+
+  static Map<String, dynamic>? _dbConfigToJson(DbConfig? dbConfig) =>
+      dbConfig?.toJson;
 
   static String get _configBaseDirectory => 'assets/config';
   static String get _configBaseFile => 'config.json';
@@ -40,7 +56,10 @@ class AppConfig extends Equatable {
 
   static Future<AppConfig> of(
       {Environment environment = Environment.prod}) async {
+    final arguments = <String>[];
+
     var json = await _jsonMap(_configBaseFile);
+    if (null == json) arguments.add("configFileName: $_configBaseFile");
     final envConfigFile = "${[
       p.basenameWithoutExtension(_configBaseFile),
       environment.toEnumString().toLowerCase()
@@ -48,7 +67,52 @@ class AppConfig extends Equatable {
         "${p.extension(_configBaseFile)}";
     final jsonEnv = await _jsonMap(envConfigFile);
     json ??= (json?.extend(jsonEnv!) as Map<String, dynamic>?) ?? jsonEnv;
-    if (null != json) return AppConfig.fromJson(json);
-    return const AppConfig();
+    if (null != json) {
+      final _interpolation = Interpolation();
+      json.extend({'environment': environment});
+      return AppConfig.fromJson(
+          _interpolation.resolve(json) as Map<String, dynamic>);
+    }
+    arguments.add("envConfigFile: $envConfigFile");
+    throw appConfigException(arguments);
   }
+
+  static FormattedException appConfigException(List<String> arguments,
+          [String message = "Failed to initiate AppConfig",
+          int errorCode = 0]) =>
+      FormattedException(
+          ProcessException('AppConfig', arguments, message, errorCode));
+}
+
+@JsonSerializable()
+class DbConfig extends Equatable {
+  const DbConfig({
+    this.appDataDbFile,
+    this.setupDataDbFile,
+    this.sqlSourceAsset,
+    this.sqlSourceWeb,
+    this.hashedIdMinLength,
+    this.uniqueRetry,
+  });
+
+  final String? appDataDbFile;
+  final String? setupDataDbFile;
+  final String? sqlSourceAsset;
+  final String? sqlSourceWeb;
+  final int? hashedIdMinLength;
+  final int? uniqueRetry;
+
+  @override
+  List<Object?> get props => [
+        appDataDbFile,
+        setupDataDbFile,
+        sqlSourceAsset,
+        sqlSourceWeb,
+        hashedIdMinLength,
+        uniqueRetry,
+      ];
+
+  factory DbConfig.fromJson(Map<String, dynamic> json) =>
+      _$DbConfigFromJson(json);
+  Map<String, dynamic> get toJson => _$DbConfigToJson(this);
 }

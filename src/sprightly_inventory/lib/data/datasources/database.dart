@@ -12,11 +12,56 @@ import '../dao.dart';
 
 part 'database.g.dart';
 
-String get appDataDbFile => 'sprightly_inventory_db.lite';
-String get setupDataDbFile => 'sprightly_setup.lite';
-String get sqlAssetDirectory => 'assets/queries_min';
-int get hashedIdMinLength => 16;
-int get uniqueRetry => 5;
+String get _appDataDbFile => 'sprightly_inventory_db.lite';
+String get _setupDataDbFile => 'sprightly_setup.lite';
+
+final dbConfig = DbConfig();
+
+class DbConfig {
+  factory DbConfig() => universal;
+  static DbConfig universal = DbConfig._();
+  DbConfig._();
+
+  String sqlSourceAsset = 'assets/queries_min';
+  String? sqlSourceWeb;
+  int hashedIdMinLength = 16;
+  int uniqueRetry = 5;
+
+  void update({
+    String? sqlSourceAsset,
+    String? sqlSourceWeb,
+    int? hashedIdMinLength,
+    int? uniqueRetry,
+  }) {
+    this.sqlSourceAsset = sqlSourceAsset ?? this.sqlSourceAsset;
+    this.sqlSourceWeb = sqlSourceWeb ?? this.sqlSourceWeb;
+    this.hashedIdMinLength = hashedIdMinLength ?? this.hashedIdMinLength;
+    this.uniqueRetry = uniqueRetry ?? this.uniqueRetry;
+  }
+}
+
+const List<Type> _appTables = <Type>[
+  Members,
+  CustomProperties,
+  // Groups,
+  // GroupMembers,
+  // Accounts,
+  // Categories,
+  // Settlements,
+  // Transactions,
+];
+const List<Type> _appDaos = <Type>[
+  SprightlyDao,
+];
+const List<Type> _setupTables = <Type>[
+  // AppFonts,
+  // FontCombos,
+  // ColorCombos,
+  AppSettings,
+];
+const List<Type> _setupDaos = <Type>[
+  SprightlySetupDao,
+];
 
 // #region Sprightly tables
 @DataClassName("Member")
@@ -107,14 +152,14 @@ class AppSettings extends Table {
 // #region Custom query & classes
 /// asset path for custom sql files
 Future<String> _getSqlQueryFromAsset(String fileName) =>
-    getAssetText(fileName, assetDirectory: sqlAssetDirectory);
+    getAssetText(fileName, assetDirectory: dbConfig.sqlSourceAsset);
 Future<String?> _getSqlQueryFromRemote(CustomQuery customQuery) =>
     RemoteFileCache.universal.getRemoteText(customQuery.source,
         identifier: customQuery.identifier, headers: customQuery.headers);
 
 /// Used to get complex queries from outside.
 ///
-/// Either a filename(without extension) inside [sqlAssetDirectory]
+/// Either a filename(without extension) inside [dbConfig.sqlSourceAsset]
 /// or an accessible web address of the file
 ///
 /// Example:
@@ -129,7 +174,7 @@ Future<String?> _getSqlQueryFromRemote(CustomQuery customQuery) =>
 ///   headers: {HttpHeaders.authorizationHeader: 'Bearer $token'});
 /// ```
 class CustomQuery {
-  /// Either a filename(without extension) inside [sqlAssetDirectory]
+  /// Either a filename(without extension) inside [dbConfig.sqlSourceAsset]
   /// or an accessible web address of the file
   ///
   /// Example:
@@ -260,7 +305,7 @@ mixin _GenericDaoMixin<T extends GeneratedDatabase> on DatabaseAccessor<T> {
     var result = '';
     var foundUnique = false;
     var attempts = 0;
-    var _hashLength = hashedIdMinLength;
+    var _hashLength = dbConfig.hashedIdMinLength;
     final _hashLibrary = hashLibrary ?? HashLibrary.values.random;
     do {
       result = hashedAll(items,
@@ -273,7 +318,7 @@ mixin _GenericDaoMixin<T extends GeneratedDatabase> on DatabaseAccessor<T> {
       attempts++;
       // If a unique Id is not found in every 3 attempts, increase the hashLength
       if (attempts % 3 == 0) _hashLength++;
-    } while (attempts < uniqueRetry && !foundUnique);
+    } while (attempts < dbConfig.uniqueRetry && !foundUnique);
     throw TimeoutException(
         'Can not found a suitable unique Id for $tableName after $attempts attempts');
   }
@@ -323,16 +368,7 @@ mixin _GenericDaoMixin<T extends GeneratedDatabase> on DatabaseAccessor<T> {
 // #endregion Custom query & classes
 
 @UseDao(
-  tables: [
-    Members,
-    CustomProperties,
-    // Groups,
-    // GroupMembers,
-    // Accounts,
-    // Categories,
-    // Settlements,
-    // Transactions
-  ],
+  tables: _appTables,
 )
 class SprightlyDao extends DatabaseAccessor<SprightlyDatabase>
     with _$SprightlyDaoMixin, _GenericDaoMixin, ReadyOrNotMixin
@@ -815,12 +851,7 @@ class SprightlyDao extends DatabaseAccessor<SprightlyDatabase>
 }
 
 @UseDao(
-  tables: [
-    // AppFonts,
-    // FontCombos,
-    // ColorCombos,
-    AppSettings,
-  ],
+  tables: _setupTables,
 )
 class SprightlySetupDao extends DatabaseAccessor<SprightlySetupDatabase>
     with _$SprightlySetupDaoMixin, _GenericDaoMixin, ReadyOrNotMixin
@@ -931,41 +962,36 @@ class SprightlySetupDao extends DatabaseAccessor<SprightlySetupDatabase>
 
 LazyDatabase _openConnection(
   String dbFile, {
-  bool isSupportFile = false,
-  bool logStatements = false,
-  bool recreateDatabase = false,
+  bool? isSupportFile,
+  bool? logStatements,
+  bool? recreateDatabase,
+  DatabaseSetup? setup,
 }) =>
     LazyDatabase(() async => VmDatabase(
           await getFile(
             dbFile,
-            isSupportFile: isSupportFile,
-            recreateFile: recreateDatabase,
+            isSupportFile: isSupportFile ?? false,
+            recreateFile: recreateDatabase ?? false,
           ),
-          logStatements: logStatements,
+          logStatements: logStatements ?? false,
+          setup: setup,
         ));
 
 @UseMoor(
-  tables: [
-    Members,
-    CustomProperties
-    // Groups,
-    // GroupMembers,
-    // Accounts,
-    // Categories,
-    // Settlements,
-    // Transactions,
-  ],
-  daos: [SprightlyDao],
+  tables: _appTables,
+  daos: _appDaos,
 )
 class SprightlyDatabase extends _$SprightlyDatabase
     implements Initiated, Disposable<bool> {
-  bool enableDebug;
-  bool recreateDatabase;
+  String? dbFile;
+  bool? enableDebug;
+  bool? recreateDatabase;
   SprightlyDatabase({
-    this.enableDebug = false,
-    this.recreateDatabase = false,
+    this.dbFile,
+    this.enableDebug,
+    this.recreateDatabase,
   }) : super(_openConnection(
-          appDataDbFile,
+          dbFile ?? _appDataDbFile,
           logStatements: enableDebug,
           recreateDatabase: recreateDatabase,
         ));
@@ -996,23 +1022,20 @@ class SprightlyDatabase extends _$SprightlyDatabase
 }
 
 @UseMoor(
-  tables: [
-    // AppFonts,
-    // FontCombos,
-    // ColorCombos,
-    AppSettings,
-  ],
-  daos: [SprightlySetupDao],
+  tables: _setupTables,
+  daos: _setupDaos,
 )
 class SprightlySetupDatabase extends _$SprightlySetupDatabase
     implements Initiated, Disposable<bool> {
-  bool enableDebug;
-  bool recreateDatabase;
+  String? dbFile;
+  bool? enableDebug;
+  bool? recreateDatabase;
   SprightlySetupDatabase({
-    this.enableDebug = false,
-    this.recreateDatabase = false,
+    this.dbFile,
+    this.enableDebug,
+    this.recreateDatabase,
   }) : super(_openConnection(
-          setupDataDbFile,
+          dbFile ?? _setupDataDbFile,
           logStatements: enableDebug,
           recreateDatabase: recreateDatabase,
         ));

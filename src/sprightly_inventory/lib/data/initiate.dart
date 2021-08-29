@@ -6,13 +6,21 @@ import 'package:sprightly_inventory/data/dao.dart';
 import 'package:sprightly_inventory/data/datasources/database.dart' as db;
 
 Future<Iterable<Initiated>> initiate(
-  KiwiContainer kiwiContainer, {
+  KiwiContainer kiwiContainer,
+  AppConfig configurations, {
   Environment environment = Environment.prod,
-  AppConfig configurations = const AppConfig(),
 }) async {
   final result = <Initiated>[];
 
+  db.dbConfig.update(
+    sqlSourceAsset: configurations.dbConfig?.sqlSourceAsset,
+    sqlSourceWeb: configurations.dbConfig?.sqlSourceWeb,
+    hashedIdMinLength: configurations.dbConfig?.hashedIdMinLength,
+    uniqueRetry: configurations.dbConfig?.uniqueRetry,
+  );
+
   final dataDb = db.SprightlyDatabase(
+      dbFile: configurations.dbConfig?.appDataDbFile,
       enableDebug: configurations.debug,
       recreateDatabase: configurations.recreateDatabase);
   kiwiContainer.registerSingleton((container) => dataDb);
@@ -21,6 +29,7 @@ Future<Iterable<Initiated>> initiate(
   result.add(dataDb);
 
   final settingsDb = db.SprightlySetupDatabase(
+      dbFile: configurations.dbConfig?.setupDataDbFile,
       enableDebug: configurations.debug,
       recreateDatabase: configurations.recreateDatabase);
   kiwiContainer.registerSingleton((container) => settingsDb);

@@ -21,11 +21,14 @@ Future<bool> initiate({Environment environment = Environment.prod}) async {
     initiates.add(remoteFileCache);
 
     // initiate database
-    initiates.addAll(await data.initiate(kiwiContainer,
-        environment: environment, configurations: configurations));
+    initiates.addAll(await data.initiate(
+      kiwiContainer,
+      configurations,
+      environment: environment,
+    ));
 
     // await settingsInitiate.initiate(kiwiContainer,
-    //     environment: environment, configurations: configurations);
+    //     environment: environment, configurations: configurations,);
 
     kiwiContainer.registerSingleton((container) => initiates,
         name: constants.coreInitiates);

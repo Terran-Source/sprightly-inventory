@@ -1,4 +1,12 @@
 {
+  "dbConfig": {
+    "appDataDbFile": "sprightly_inventory_db_{environment}.lite",
+    "setupDataDbFile": "sprightly_setup_{environment}.lite",
+    "sqlSourceAsset": "assets/queries_min",
+    "sqlSourceWeb": "http://example.com/store",
+    "hashedIdMinLength": 16,
+    "uniqueRetry": 5
+  },
   "debug": false,
   "recreateDatabase": false
 }
