@@ -36,7 +36,7 @@ dependencies:
   moor: ^4.4.1
 
   # package information
-  package_info: ^2.0.2
+  package_info_plus: ^1.0.6
 
   # sqlite3-moor
   sqlite3_flutter_libs: ^0.5.0
