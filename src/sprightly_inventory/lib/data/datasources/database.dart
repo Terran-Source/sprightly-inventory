@@ -4,8 +4,8 @@ import 'dart:async';
 
 import 'package:dart_marganam/extensions.dart';
 import 'package:dart_marganam/utils.dart';
-import 'package:moor/ffi.dart';
-import 'package:moor/moor.dart';
+import 'package:drift/drift.dart';
+import 'package:drift/native.dart';
 import 'package:sprightly_inventory/core/config/enums.dart';
 
 import '../dao.dart';
@@ -367,7 +367,7 @@ mixin _GenericDaoMixin<T extends GeneratedDatabase> on DatabaseAccessor<T> {
 }
 // #endregion Custom query & classes
 
-@UseDao(
+@DriftAccessor(
   tables: _appTables,
 )
 class SprightlyDao extends DatabaseAccessor<SprightlyDatabase>
@@ -402,7 +402,7 @@ class SprightlyDao extends DatabaseAccessor<SprightlyDatabase>
   @override
   Future<void> beforeOpen(OpeningDetails details, Migrator m) async {
     await getReady();
-    moorRuntimeOptions.defaultSerializer =
+    driftRuntimeOptions.defaultSerializer =
         const ExtendedValueSerializer(enumTypes);
     if (details.wasCreated) {
       // TODO: do first time activity
@@ -850,7 +850,7 @@ class SprightlyDao extends DatabaseAccessor<SprightlyDatabase>
 //   }
 }
 
-@UseDao(
+@DriftAccessor(
   tables: _setupTables,
 )
 class SprightlySetupDao extends DatabaseAccessor<SprightlySetupDatabase>
@@ -890,7 +890,7 @@ class SprightlySetupDao extends DatabaseAccessor<SprightlySetupDatabase>
   @override
   Future<void> beforeOpen(OpeningDetails details, Migrator m) async {
     await getReady();
-    moorRuntimeOptions.defaultSerializer =
+    driftRuntimeOptions.defaultSerializer =
         const ExtendedValueSerializer(enumTypes);
     if (details.wasCreated) {
       // TODO: do first time activity
@@ -923,9 +923,9 @@ class SprightlySetupDao extends DatabaseAccessor<SprightlySetupDatabase>
   Stream<List<AppSetting>> watchAppSettings() => select(appSettings).watch();
 
   @override
-  Future<AppSetting> getAppSetting(String name) async => AppSetting.fromData(
-      await getRecordWithColumnValue(appSettings.actualTableName, 'name', name),
-      attachedDatabase);
+  Future<AppSetting> getAppSetting(String name) async =>
+      AppSetting.fromData(await getRecordWithColumnValue(
+          appSettings.actualTableName, 'name', name));
 
   @override
   Future<bool> updateAppSetting(String name, String value,
@@ -967,7 +967,7 @@ LazyDatabase _openConnection(
   bool? recreateDatabase,
   DatabaseSetup? setup,
 }) =>
-    LazyDatabase(() async => VmDatabase(
+    LazyDatabase(() async => NativeDatabase(
           await getFile(
             dbFile,
             isSupportFile: isSupportFile ?? false,
@@ -977,7 +977,7 @@ LazyDatabase _openConnection(
           setup: setup,
         ));
 
-@UseMoor(
+@DriftDatabase(
   tables: _appTables,
   daos: _appDaos,
 )
@@ -1021,7 +1021,7 @@ class SprightlyDatabase extends _$SprightlyDatabase
   }
 }
 
-@UseMoor(
+@DriftDatabase(
   tables: _setupTables,
   daos: _setupDaos,
 )

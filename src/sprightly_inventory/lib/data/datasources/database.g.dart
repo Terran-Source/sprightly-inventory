@@ -25,8 +25,7 @@ class Member extends DataClass implements Insertable<Member> {
       this.signature,
       required this.createdOn,
       this.updatedOn});
-  factory Member.fromData(Map<String, dynamic> data, GeneratedDatabase db,
-      {String? prefix}) {
+  factory Member.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return Member(
       id: const StringType()
@@ -95,7 +94,7 @@ class Member extends DataClass implements Insertable<Member> {
 
   factory Member.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return Member(
       id: serializer.fromJson<String>(json['id']),
       name: serializer.fromJson<String>(json['name']),
@@ -109,7 +108,7 @@ class Member extends DataClass implements Insertable<Member> {
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<String>(id),
       'name': serializer.toJson<String>(name),
@@ -157,18 +156,8 @@ class Member extends DataClass implements Insertable<Member> {
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(
-      id.hashCode,
-      $mrjc(
-          name.hashCode,
-          $mrjc(
-              avatar.hashCode,
-              $mrjc(
-                  idType.hashCode,
-                  $mrjc(
-                      idValue.hashCode,
-                      $mrjc(signature.hashCode,
-                          $mrjc(createdOn.hashCode, updatedOn.hashCode))))))));
+  int get hashCode => Object.hash(
+      id, name, avatar, idType, idValue, signature, createdOn, updatedOn);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -308,49 +297,57 @@ class $MembersTable extends Members with TableInfo<$MembersTable, Member> {
   final String? _alias;
   $MembersTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
   late final GeneratedColumn<String?> id =
       GeneratedColumn<String?>('id', aliasedName, false,
           additionalChecks: GeneratedColumn.checkTextLength(
             minTextLength: 16,
           ),
-          typeName: 'TEXT',
+          type: const StringType(),
           requiredDuringInsert: true);
   final VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
   late final GeneratedColumn<String?> name = GeneratedColumn<String?>(
       'name', aliasedName, false,
       additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 500),
-      typeName: 'TEXT',
+      type: const StringType(),
       requiredDuringInsert: true);
   final VerificationMeta _avatarMeta = const VerificationMeta('avatar');
+  @override
   late final GeneratedColumn<String?> avatar = GeneratedColumn<String?>(
       'avatar', aliasedName, true,
-      typeName: 'TEXT', requiredDuringInsert: false);
+      type: const StringType(), requiredDuringInsert: false);
   final VerificationMeta _idTypeMeta = const VerificationMeta('idType');
+  @override
   late final GeneratedColumnWithTypeConverter<MemberIdType, String?> idType =
       GeneratedColumn<String?>('idType', aliasedName, true,
-              typeName: 'TEXT', requiredDuringInsert: false)
+              type: const StringType(), requiredDuringInsert: false)
           .withConverter<MemberIdType>($MembersTable.$converter0);
   final VerificationMeta _idValueMeta = const VerificationMeta('idValue');
+  @override
   late final GeneratedColumn<String?> idValue = GeneratedColumn<String?>(
       'idValue', aliasedName, true,
       additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 50),
-      typeName: 'TEXT',
+      type: const StringType(),
       requiredDuringInsert: false);
   final VerificationMeta _signatureMeta = const VerificationMeta('signature');
+  @override
   late final GeneratedColumn<String?> signature = GeneratedColumn<String?>(
       'signature', aliasedName, true,
-      typeName: 'TEXT', requiredDuringInsert: false);
+      type: const StringType(), requiredDuringInsert: false);
   final VerificationMeta _createdOnMeta = const VerificationMeta('createdOn');
+  @override
   late final GeneratedColumn<DateTime?> createdOn = GeneratedColumn<DateTime?>(
       'createdOn', aliasedName, false,
-      typeName: 'INTEGER',
+      type: const IntType(),
       requiredDuringInsert: false,
       $customConstraints: 'NOT NULL DEFAULT (STRFTIME(\'%s\',\'now\'))',
       clientDefault: () => DateTime.now().toUtc());
   final VerificationMeta _updatedOnMeta = const VerificationMeta('updatedOn');
+  @override
   late final GeneratedColumn<DateTime?> updatedOn = GeneratedColumn<DateTime?>(
       'updatedOn', aliasedName, true,
-      typeName: 'INTEGER',
+      type: const IntType(),
       requiredDuringInsert: false,
       clientDefault: () => DateTime.now().toUtc());
   @override
@@ -404,7 +401,7 @@ class $MembersTable extends Members with TableInfo<$MembersTable, Member> {
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   Member map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return Member.fromData(data, _db,
+    return Member.fromData(data,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
@@ -433,9 +430,7 @@ class CustomProperty extends DataClass implements Insertable<CustomProperty> {
       required this.name,
       required this.createdOn,
       this.updatedOn});
-  factory CustomProperty.fromData(
-      Map<String, dynamic> data, GeneratedDatabase db,
-      {String? prefix}) {
+  factory CustomProperty.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return CustomProperty(
       id: const StringType()
@@ -489,7 +484,7 @@ class CustomProperty extends DataClass implements Insertable<CustomProperty> {
 
   factory CustomProperty.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return CustomProperty(
       id: serializer.fromJson<String>(json['id']),
       parent: serializer.fromJson<String>(json['parent']),
@@ -502,7 +497,7 @@ class CustomProperty extends DataClass implements Insertable<CustomProperty> {
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<String>(id),
       'parent': serializer.toJson<String>(parent),
@@ -546,16 +541,8 @@ class CustomProperty extends DataClass implements Insertable<CustomProperty> {
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(
-      id.hashCode,
-      $mrjc(
-          parent.hashCode,
-          $mrjc(
-              parentId.hashCode,
-              $mrjc(
-                  propertyType.hashCode,
-                  $mrjc(name.hashCode,
-                      $mrjc(createdOn.hashCode, updatedOn.hashCode)))))));
+  int get hashCode => Object.hash(
+      id, parent, parentId, propertyType, name, createdOn, updatedOn);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -688,53 +675,60 @@ class $CustomPropertiesTable extends CustomProperties
   final String? _alias;
   $CustomPropertiesTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
   late final GeneratedColumn<String?> id =
       GeneratedColumn<String?>('id', aliasedName, false,
           additionalChecks: GeneratedColumn.checkTextLength(
             minTextLength: 16,
           ),
-          typeName: 'TEXT',
+          type: const StringType(),
           requiredDuringInsert: true);
   final VerificationMeta _parentMeta = const VerificationMeta('parent');
+  @override
   late final GeneratedColumn<String?> parent =
       GeneratedColumn<String?>('parent', aliasedName, false,
           additionalChecks: GeneratedColumn.checkTextLength(
             minTextLength: 50,
           ),
-          typeName: 'TEXT',
+          type: const StringType(),
           requiredDuringInsert: true);
   final VerificationMeta _parentIdMeta = const VerificationMeta('parentId');
+  @override
   late final GeneratedColumn<String?> parentId =
       GeneratedColumn<String?>('parentId', aliasedName, false,
           additionalChecks: GeneratedColumn.checkTextLength(
             minTextLength: 16,
           ),
-          typeName: 'TEXT',
+          type: const StringType(),
           requiredDuringInsert: true);
   final VerificationMeta _propertyTypeMeta =
       const VerificationMeta('propertyType');
+  @override
   late final GeneratedColumnWithTypeConverter<PropertyType, String?>
       propertyType = GeneratedColumn<String?>(
               'propertyType', aliasedName, false,
-              typeName: 'TEXT', requiredDuringInsert: true)
+              type: const StringType(), requiredDuringInsert: true)
           .withConverter<PropertyType>($CustomPropertiesTable.$converter0);
   final VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
   late final GeneratedColumn<String?> name = GeneratedColumn<String?>(
       'name', aliasedName, false,
       additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 250),
-      typeName: 'TEXT',
+      type: const StringType(),
       requiredDuringInsert: true);
   final VerificationMeta _createdOnMeta = const VerificationMeta('createdOn');
+  @override
   late final GeneratedColumn<DateTime?> createdOn = GeneratedColumn<DateTime?>(
       'createdOn', aliasedName, false,
-      typeName: 'INTEGER',
+      type: const IntType(),
       requiredDuringInsert: false,
       $customConstraints: 'NOT NULL DEFAULT (STRFTIME(\'%s\',\'now\'))',
       clientDefault: () => DateTime.now().toUtc());
   final VerificationMeta _updatedOnMeta = const VerificationMeta('updatedOn');
+  @override
   late final GeneratedColumn<DateTime?> updatedOn = GeneratedColumn<DateTime?>(
       'updatedOn', aliasedName, true,
-      typeName: 'INTEGER',
+      type: const IntType(),
       requiredDuringInsert: false,
       clientDefault: () => DateTime.now().toUtc());
   @override
@@ -788,7 +782,7 @@ class $CustomPropertiesTable extends CustomProperties
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   CustomProperty map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return CustomProperty.fromData(data, _db,
+    return CustomProperty.fromData(data,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
@@ -828,8 +822,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
       this.type,
       required this.createdOn,
       this.updatedOn});
-  factory AppSetting.fromData(Map<String, dynamic> data, GeneratedDatabase db,
-      {String? prefix}) {
+  factory AppSetting.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return AppSetting(
       name: const StringType()
@@ -874,7 +867,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
 
   factory AppSetting.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return AppSetting(
       name: serializer.fromJson<String>(json['name']),
       value: serializer.fromJson<String>(json['value']),
@@ -885,7 +878,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'name': serializer.toJson<String>(name),
       'value': serializer.toJson<String>(value),
@@ -921,12 +914,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(
-      name.hashCode,
-      $mrjc(
-          value.hashCode,
-          $mrjc(
-              type.hashCode, $mrjc(createdOn.hashCode, updatedOn.hashCode)))));
+  int get hashCode => Object.hash(name, value, type, createdOn, updatedOn);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1031,31 +1019,36 @@ class $AppSettingsTable extends AppSettings
   final String? _alias;
   $AppSettingsTable(this._db, [this._alias]);
   final VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
   late final GeneratedColumn<String?> name = GeneratedColumn<String?>(
       'name', aliasedName, false,
       additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 50),
-      typeName: 'TEXT',
+      type: const StringType(),
       requiredDuringInsert: true);
   final VerificationMeta _valueMeta = const VerificationMeta('value');
+  @override
   late final GeneratedColumn<String?> value = GeneratedColumn<String?>(
       'value', aliasedName, false,
-      typeName: 'TEXT', requiredDuringInsert: true);
+      type: const StringType(), requiredDuringInsert: true);
   final VerificationMeta _typeMeta = const VerificationMeta('type');
+  @override
   late final GeneratedColumnWithTypeConverter<PropertyType, String?> type =
       GeneratedColumn<String?>('type', aliasedName, true,
-              typeName: 'TEXT', requiredDuringInsert: false)
+              type: const StringType(), requiredDuringInsert: false)
           .withConverter<PropertyType>($AppSettingsTable.$converter0);
   final VerificationMeta _createdOnMeta = const VerificationMeta('createdOn');
+  @override
   late final GeneratedColumn<DateTime?> createdOn = GeneratedColumn<DateTime?>(
       'createdOn', aliasedName, false,
-      typeName: 'INTEGER',
+      type: const IntType(),
       requiredDuringInsert: false,
       $customConstraints: 'NOT NULL DEFAULT (STRFTIME(\'%s\',\'now\'))',
       clientDefault: () => DateTime.now().toUtc());
   final VerificationMeta _updatedOnMeta = const VerificationMeta('updatedOn');
+  @override
   late final GeneratedColumn<DateTime?> updatedOn = GeneratedColumn<DateTime?>(
       'updatedOn', aliasedName, true,
-      typeName: 'INTEGER',
+      type: const IntType(),
       requiredDuringInsert: false,
       clientDefault: () => DateTime.now().toUtc());
   @override
@@ -1098,7 +1091,7 @@ class $AppSettingsTable extends AppSettings
   Set<GeneratedColumn> get $primaryKey => {name};
   @override
   AppSetting map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return AppSetting.fromData(data, _db,
+    return AppSetting.fromData(data,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
