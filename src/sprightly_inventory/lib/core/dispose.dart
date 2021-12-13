@@ -28,11 +28,13 @@ Future<bool> dispose({
   } on FormattedException catch (e) {
     showErrorPopup(e);
   } on Exception catch (e, st) {
-    showErrorPopup(FormattedException(
-      e,
-      stackTrace: st,
-      moduleName: 'sprightly.initiate',
-    ));
+    showErrorPopup(
+      FormattedException(
+        e,
+        stackTrace: st,
+        moduleName: 'sprightly.initiate',
+      ),
+    );
   }
   return false;
 }

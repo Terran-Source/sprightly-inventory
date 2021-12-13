@@ -130,8 +130,12 @@ class AppSettings extends Table {
       .named('type')
       .nullable()
       //.customConstraint(_typeConstraint)
-      .map(const EnumTypeConverter<PropertyType>(
-          PropertyType.values, PropertyType.String))();
+      .map(
+        const EnumTypeConverter<PropertyType>(
+          PropertyType.values,
+          PropertyType.String,
+        ),
+      )();
   DateTimeColumn get createdOn => dateTime()
       .named('createdOn')
       .clientDefault(() => DateTime.now().toUtc())
@@ -154,8 +158,11 @@ class AppSettings extends Table {
 Future<String> _getSqlQueryFromAsset(String fileName) =>
     getAssetText(fileName, assetDirectory: dbConfig.sqlSourceAsset);
 Future<String?> _getSqlQueryFromRemote(CustomQuery customQuery) =>
-    RemoteFileCache.universal.getRemoteText(customQuery.source,
-        identifier: customQuery.identifier, headers: customQuery.headers);
+    RemoteFileCache.universal.getRemoteText(
+      customQuery.source,
+      identifier: customQuery.identifier,
+      headers: customQuery.headers,
+    );
 
 /// Used to get complex queries from outside.
 ///
@@ -195,19 +202,35 @@ class CustomQuery {
 
   String? _query;
 
-  CustomQuery._(this.source, this._from, this.identifier,
-      {this.headers = const <String, String>{}});
+  CustomQuery._(
+    this.source,
+    this._from,
+    this.identifier, {
+    this.headers = const <String, String>{},
+  });
 
-  factory CustomQuery.fromAsset(String fileNameWithoutExtension,
-          {String? identifier}) =>
-      CustomQuery._(fileNameWithoutExtension, ResourceFrom.Asset,
-          identifier ?? fileNameWithoutExtension);
+  factory CustomQuery.fromAsset(
+    String fileNameWithoutExtension, {
+    String? identifier,
+  }) =>
+      CustomQuery._(
+        fileNameWithoutExtension,
+        ResourceFrom.Asset,
+        identifier ?? fileNameWithoutExtension,
+      );
 
-  factory CustomQuery.fromWeb(String identifier, String address,
-      {Map<String, String> headers = const <String, String>{}}) {
+  factory CustomQuery.fromWeb(
+    String identifier,
+    String address, {
+    Map<String, String> headers = const <String, String>{},
+  }) {
     Uri.parse(address);
-    return CustomQuery._(address, ResourceFrom.Web, identifier,
-        headers: headers);
+    return CustomQuery._(
+      address,
+      ResourceFrom.Web,
+      identifier,
+      headers: headers,
+    );
   }
 
   Future<String?> _load() async {
@@ -290,7 +313,8 @@ mixin _GenericDaoMixin<T extends GeneratedDatabase> on DatabaseAccessor<T> {
   Future _getDaoMixinReady() async {
     await _queries.getReady();
     await customStatement(
-        await _queries.defaultStartupStatement.load() ?? 'VACUUM;');
+      await _queries.defaultStartupStatement.load() ?? 'VACUUM;',
+    );
   }
 
   Future<void> onCreate(Migrator m) async {
@@ -300,19 +324,25 @@ mixin _GenericDaoMixin<T extends GeneratedDatabase> on DatabaseAccessor<T> {
   Future<void> onUpgrade(Migrator m, int from, int to);
   Future<void> beforeOpen(OpeningDetails details, Migrator m);
 
-  Future<String> _uniqueId(String tableName, List<String> items,
-      {HashLibrary? hashLibrary, String? key}) async {
+  Future<String> _uniqueId(
+    String tableName,
+    List<String> items, {
+    HashLibrary? hashLibrary,
+    String? key,
+  }) async {
     var result = '';
     var foundUnique = false;
     var attempts = 0;
     var _hashLength = dbConfig.hashedIdMinLength;
     final _hashLibrary = hashLibrary ?? HashLibrary.values.random;
     do {
-      result = hashedAll(items,
-          hashLength: _hashLength,
-          library: _hashLibrary,
-          key: key,
-          prefixLibrary: false);
+      result = hashedAll(
+        items,
+        hashLength: _hashLength,
+        library: _hashLibrary,
+        key: key,
+        prefixLibrary: false,
+      );
       foundUnique = !await recordWithIdExists(tableName, result);
       if (foundUnique) return result;
       attempts++;
@@ -320,14 +350,19 @@ mixin _GenericDaoMixin<T extends GeneratedDatabase> on DatabaseAccessor<T> {
       if (attempts % 3 == 0) _hashLength++;
     } while (attempts < dbConfig.uniqueRetry && !foundUnique);
     throw TimeoutException(
-        'Can not found a suitable unique Id for $tableName after $attempts attempts');
+      'Can not found a suitable unique Id for '
+      '$tableName after $attempts attempts',
+    );
   }
 
   Future<bool> recordWithIdExists(String tableName, String id) =>
       recordWithColumnValueExists(tableName, 'id', id);
 
   Future<bool> recordWithColumnValueExists(
-          String tableName, String column, String value) async =>
+    String tableName,
+    String column,
+    String value,
+  ) async =>
       await customSelect(
         "SELECT COUNT(1) AS counting FROM $tableName t WHERE t.$column=:value",
         variables: [Variable.withString(value)],
@@ -335,34 +370,48 @@ mixin _GenericDaoMixin<T extends GeneratedDatabase> on DatabaseAccessor<T> {
       0;
 
   Selectable<QueryRow> getRecordsWithColumnValue(
-          String tableName, String column, String value,
-          {TableInfo? table}) =>
+    String tableName,
+    String column,
+    String value, {
+    TableInfo? table,
+  }) =>
       customSelect(
         "SELECT t.* FROM $tableName t WHERE t.$column=:value",
         variables: [Variable.withString(value)],
         readsFrom: null == table ? {} : {table},
       );
 
-  /// **_caution_**: use this function only if the query returns only 1 record or none
+  /// **_caution_**: use this function only if the query returns only 1 record
+  /// or none
   Future<Map<String, dynamic>> getRecordWithColumnValue(
-          String tableName, String column, String value,
-          {TableInfo? table}) async =>
+    String tableName,
+    String column,
+    String value, {
+    TableInfo? table,
+  }) async =>
       (await getRecordsWithColumnValue(tableName, column, value, table: table)
               .getSingle())
           .data;
 
-  Future<Map<String, dynamic>> getRecord(String tableName, String id,
-          {TableInfo? table}) async =>
+  Future<Map<String, dynamic>> getRecord(
+    String tableName,
+    String id, {
+    TableInfo? table,
+  }) async =>
       (await getRecordsWithColumnValue(tableName, 'id', id, table: table)
               .getSingle())
           .data;
 
   Future<bool> updateRecord<Tbl extends Table, R extends DataClass>(
-          TableInfo<Tbl, R> table, Insertable<R> record) =>
+    TableInfo<Tbl, R> table,
+    Insertable<R> record,
+  ) =>
       update(table).replace(record);
 
   Future<int> deleteRecord<Tbl extends Table, R extends DataClass>(
-          TableInfo<Tbl, R> table, Insertable<R> record) =>
+    TableInfo<Tbl, R> table,
+    Insertable<R> record,
+  ) =>
       delete(table).delete(record);
 }
 // #endregion Custom query & classes
@@ -457,19 +506,23 @@ class SprightlyDao extends DatabaseAccessor<SprightlyDatabase>
       Member.fromJson(await getRecord(members.actualTableName, memberId));
 
   @override
-  Future<Member?> addMember(String idValue, String name,
-      {String? id,
-      String? avatar,
-      MemberIdType idType = MemberIdType.NickName,
-      String? signature}) async {
+  Future<Member?> addMember(
+    String idValue,
+    String name, {
+    String? id,
+    String? avatar,
+    MemberIdType idType = MemberIdType.NickName,
+    String? signature,
+  }) async {
     final _id = id ?? await _uniqueId(members.actualTableName, [idValue]);
     final membersComp = MembersCompanion.insert(
-        id: _id,
-        name: name,
-        avatar: Value(avatar),
-        idType: Value(idType),
-        idValue: Value(idValue),
-        signature: Value(signature));
+      id: _id,
+      name: name,
+      avatar: Value(avatar),
+      idType: Value(idType),
+      idValue: Value(idValue),
+      signature: Value(signature),
+    );
     if (await into(members).insert(membersComp) > 0) {
       return getMember(_id);
     }
@@ -518,20 +571,23 @@ class SprightlyDao extends DatabaseAccessor<SprightlyDatabase>
 //   }
 
   @override
-  Future<Member?> updateMember(String id,
-      {String? name,
-      String? avatar,
-      MemberIdType? idType,
-      String? idValue,
-      String? signature}) async {
+  Future<Member?> updateMember(
+    String id, {
+    String? name,
+    String? avatar,
+    MemberIdType? idType,
+    String? idValue,
+    String? signature,
+  }) async {
     final existing = await getMember(id);
     final updated = existing.copyWith(
-        name: name,
-        avatar: avatar,
-        idType: idType,
-        idValue: idValue,
-        signature: signature,
-        updatedOn: DateTime.now().toUtc());
+      name: name,
+      avatar: avatar,
+      idType: idType,
+      idValue: idValue,
+      signature: signature,
+      updatedOn: DateTime.now().toUtc(),
+    );
     if (await updateRecord(members, updated)) {
       return getMember(id);
     }
@@ -899,7 +955,9 @@ class SprightlySetupDao extends DatabaseAccessor<SprightlySetupDatabase>
     if (details.wasCreated || details.hadUpgrade) {
       // sync dbVersion
       await updateAppSetting(
-          'dbVersion', attachedDatabase.schemaVersion.toString());
+        'dbVersion',
+        attachedDatabase.schemaVersion.toString(),
+      );
     }
   }
 
@@ -923,13 +981,21 @@ class SprightlySetupDao extends DatabaseAccessor<SprightlySetupDatabase>
   Stream<List<AppSetting>> watchAppSettings() => select(appSettings).watch();
 
   @override
-  Future<AppSetting> getAppSetting(String name) async =>
-      AppSetting.fromData(await getRecordWithColumnValue(
-          appSettings.actualTableName, 'name', name));
+  Future<AppSetting> getAppSetting(String name) async => AppSetting.fromData(
+        await getRecordWithColumnValue(
+          appSettings.actualTableName,
+          'name',
+          name,
+        ),
+      );
 
   @override
-  Future<bool> updateAppSetting(String name, String value,
-      {PropertyType? type, bool batchOperation = false}) async {
+  Future<bool> updateAppSetting(
+    String name,
+    String value, {
+    PropertyType? type,
+    bool batchOperation = false,
+  }) async {
     final existing = await getAppSetting(name);
     final updated = existing.copyWith(
       value: value,
@@ -944,8 +1010,10 @@ class SprightlySetupDao extends DatabaseAccessor<SprightlySetupDatabase>
   @override
   Future<bool> updateAppSettings(Map<String, String> settings) async {
     var result = true;
-    settings.forEach((name, value) async => result =
-        result && await updateAppSetting(name, value, batchOperation: true));
+    settings.forEach(
+      (name, value) async => result =
+          result && await updateAppSetting(name, value, batchOperation: true),
+    );
     _allAppSettings = await getAppSettings();
     return result;
   }
@@ -967,15 +1035,17 @@ LazyDatabase _openConnection(
   bool? recreateDatabase,
   DatabaseSetup? setup,
 }) =>
-    LazyDatabase(() async => NativeDatabase(
-          await getFile(
-            dbFile,
-            isSupportFile: isSupportFile ?? false,
-            recreateFile: recreateDatabase ?? false,
-          ),
-          logStatements: logStatements ?? false,
-          setup: setup,
-        ));
+    LazyDatabase(
+      () async => NativeDatabase(
+        await getFile(
+          dbFile,
+          isSupportFile: isSupportFile ?? false,
+          recreateFile: recreateDatabase ?? false,
+        ),
+        logStatements: logStatements ?? false,
+        setup: setup,
+      ),
+    );
 
 @DriftDatabase(
   tables: _appTables,
@@ -990,11 +1060,13 @@ class SprightlyDatabase extends _$SprightlyDatabase
     this.dbFile,
     this.enableDebug,
     this.recreateDatabase,
-  }) : super(_openConnection(
-          dbFile ?? _appDataDbFile,
-          logStatements: enableDebug,
-          recreateDatabase: recreateDatabase,
-        ));
+  }) : super(
+          _openConnection(
+            dbFile ?? _appDataDbFile,
+            logStatements: enableDebug,
+            recreateDatabase: recreateDatabase,
+          ),
+        );
 
   @override
   FutureOr initiate() async {
@@ -1034,11 +1106,13 @@ class SprightlySetupDatabase extends _$SprightlySetupDatabase
     this.dbFile,
     this.enableDebug,
     this.recreateDatabase,
-  }) : super(_openConnection(
-          dbFile ?? _setupDataDbFile,
-          logStatements: enableDebug,
-          recreateDatabase: recreateDatabase,
-        ));
+  }) : super(
+          _openConnection(
+            dbFile ?? _setupDataDbFile,
+            logStatements: enableDebug,
+            recreateDatabase: recreateDatabase,
+          ),
+        );
 
   @override
   FutureOr initiate() async {

@@ -47,15 +47,20 @@ class AppConfig extends Equatable {
 
   static Future<Map<String, dynamic>?> _jsonMap(String configFileName) async {
     try {
-      return json.decode(await getAssetText(configFileName,
-          assetDirectory: _configBaseDirectory)) as Map<String, dynamic>;
+      return json.decode(
+        await getAssetText(
+          configFileName,
+          assetDirectory: _configBaseDirectory,
+        ),
+      ) as Map<String, dynamic>;
     } catch (_) {
       return null;
     }
   }
 
-  static Future<AppConfig> of(
-      {Environment environment = Environment.prod}) async {
+  static Future<AppConfig> of({
+    Environment environment = Environment.prod,
+  }) async {
     final arguments = <String>[];
 
     var json = await _jsonMap(_configBaseFile);
@@ -71,17 +76,21 @@ class AppConfig extends Equatable {
       final _interpolation = Interpolation();
       json.extend({'environment': environment});
       return AppConfig.fromJson(
-          _interpolation.resolve(json) as Map<String, dynamic>);
+        _interpolation.resolve(json) as Map<String, dynamic>,
+      );
     }
     arguments.add("envConfigFile: $envConfigFile");
     throw appConfigException(arguments);
   }
 
-  static FormattedException appConfigException(List<String> arguments,
-          [String message = "Failed to initiate AppConfig",
-          int errorCode = 0]) =>
+  static FormattedException appConfigException(
+    List<String> arguments, [
+    String message = "Failed to initiate AppConfig",
+    int errorCode = 0,
+  ]) =>
       FormattedException(
-          ProcessException('AppConfig', arguments, message, errorCode));
+        ProcessException('AppConfig', arguments, message, errorCode),
+      );
 }
 
 @JsonSerializable()

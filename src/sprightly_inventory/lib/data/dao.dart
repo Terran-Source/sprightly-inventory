@@ -47,11 +47,14 @@ abstract class SystemDao extends AppDao {
   // Stream<List<Member>> watchGroupOnlyMembers(String groupId);
   // Future<bool> memberWithNameExists(String name);
   Future<Member> getMember(String memberId);
-  Future<Member?> addMember(String idValue, String name,
-      {String? id,
-      String? avatar,
-      MemberIdType idType = MemberIdType.NickName,
-      String? signature});
+  Future<Member?> addMember(
+    String idValue,
+    String name, {
+    String? id,
+    String? avatar,
+    MemberIdType idType = MemberIdType.NickName,
+    String? signature,
+  });
   // Future<Member> addGroupMember(String groupId, String idValue,
   //     {String id,
   //     String name,
@@ -61,12 +64,14 @@ abstract class SystemDao extends AppDao {
   //     String secondaryIdValue,
   //     bool isGroupExpense = false,
   //     String signature});
-  Future<Member?> updateMember(String id,
-      {String? name,
-      String? avatar,
-      MemberIdType? idType,
-      String? idValue,
-      String? signature});
+  Future<Member?> updateMember(
+    String id, {
+    String? name,
+    String? avatar,
+    MemberIdType? idType,
+    String? idValue,
+    String? signature,
+  });
   Future<int> deleteMember(String id);
   // Future<int> deleteMemberFromGroup(String memberId, String groupId);
 

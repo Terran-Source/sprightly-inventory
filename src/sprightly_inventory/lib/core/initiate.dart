@@ -21,17 +21,21 @@ Future<bool> initiate({Environment environment = Environment.prod}) async {
     initiates.add(remoteFileCache);
 
     // initiate database
-    initiates.addAll(await data.initiate(
-      kiwiContainer,
-      configurations,
-      environment: environment,
-    ));
+    initiates.addAll(
+      await data.initiate(
+        kiwiContainer,
+        configurations,
+        environment: environment,
+      ),
+    );
 
     // await settingsInitiate.initiate(kiwiContainer,
     //     environment: environment, configurations: configurations,);
 
-    kiwiContainer.registerSingleton((container) => initiates,
-        name: constants.coreInitiates);
+    kiwiContainer.registerSingleton(
+      (container) => initiates,
+      name: constants.coreInitiates,
+    );
     for (final initiator in initiates) {
       await initiator.initiate();
     }
@@ -45,11 +49,13 @@ Future<bool> initiate({Environment environment = Environment.prod}) async {
   } on FormattedException catch (e) {
     showErrorPopup(e);
   } on Exception catch (e, st) {
-    showErrorPopup(FormattedException(
-      e,
-      stackTrace: st,
-      moduleName: 'sprightly.initiate',
-    ));
+    showErrorPopup(
+      FormattedException(
+        e,
+        stackTrace: st,
+        moduleName: 'sprightly.initiate',
+      ),
+    );
   }
   return false;
 }
