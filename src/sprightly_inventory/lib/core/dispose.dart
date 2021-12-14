@@ -13,7 +13,7 @@ Future<bool> dispose({
 
     // final configurations = kiwiContainer.resolve<AppConfig>();
 
-    final List<Initiated> initiates =
+    final initiates =
         kiwiContainer.resolve<List<Initiated>>(constants.coreInitiates);
     for (final initiate in initiates) {
       if (initiate is Disposable) {
