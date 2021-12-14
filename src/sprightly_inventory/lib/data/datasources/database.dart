@@ -75,7 +75,7 @@ class Members extends Table {
   TextColumn get idType => text()
       .named('idType')
       .nullable()
-      .map(const EnumTypeConverter<MemberIdType>(MemberIdType.values))();
+      .map(const EnumTextConverter<MemberIdType>(MemberIdType.values))();
   TextColumn get idValue =>
       text().named('idValue').nullable().withLength(max: 50)();
   TextColumn get signature => text().named('signature').nullable()();
@@ -102,7 +102,7 @@ class CustomProperties extends Table {
   TextColumn get parentId => text().named('parentId').withLength(min: 16)();
   TextColumn get propertyType => text()
       .named('propertyType')
-      .map(const EnumTypeConverter<PropertyType>(PropertyType.values))();
+      .map(const EnumTextConverter<PropertyType>(PropertyType.values))();
   TextColumn get name => text().named('name').withLength(max: 250)();
   DateTimeColumn get createdOn => dateTime()
       .named('createdOn')
@@ -131,7 +131,7 @@ class AppSettings extends Table {
       .nullable()
       //.customConstraint(_typeConstraint)
       .map(
-        const EnumTypeConverter<PropertyType>(
+        const EnumTextConverter<PropertyType>(
           PropertyType.values,
           PropertyType.String,
         ),

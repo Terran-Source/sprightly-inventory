@@ -411,7 +411,7 @@ class $MembersTable extends Members with TableInfo<$MembersTable, Member> {
   }
 
   static TypeConverter<MemberIdType, String> $converter0 =
-      const EnumTypeConverter<MemberIdType>(MemberIdType.values);
+      const EnumTextConverter<MemberIdType>(MemberIdType.values);
 }
 
 class CustomProperty extends DataClass implements Insertable<CustomProperty> {
@@ -792,7 +792,7 @@ class $CustomPropertiesTable extends CustomProperties
   }
 
   static TypeConverter<PropertyType, String> $converter0 =
-      const EnumTypeConverter<PropertyType>(PropertyType.values);
+      const EnumTextConverter<PropertyType>(PropertyType.values);
 }
 
 abstract class _$SprightlyDatabase extends GeneratedDatabase {
@@ -1101,7 +1101,7 @@ class $AppSettingsTable extends AppSettings
   }
 
   static TypeConverter<PropertyType, String> $converter0 =
-      const EnumTypeConverter<PropertyType>(
+      const EnumTextConverter<PropertyType>(
           PropertyType.values, PropertyType.String);
 }
 
