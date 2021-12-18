@@ -23,7 +23,7 @@ Map<String, dynamic> _$AppConfigToJson(AppConfig instance) {
     }
   }
 
-  writeNotNull('dbConfig', AppConfig._dbConfigToJson(instance.dbConfig));
+  writeNotNull('dbConfig', instance.dbConfig?.toJson());
   val['debug'] = instance.debug;
   val['recreateDatabase'] = instance.recreateDatabase;
   return val;

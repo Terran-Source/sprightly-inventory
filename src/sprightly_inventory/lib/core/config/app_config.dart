@@ -12,7 +12,7 @@ import 'package:sprightly_inventory/core/config/enums.dart';
 
 part 'app_config.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class AppConfig extends Equatable {
   const AppConfig({
     this.dbConfig,
@@ -20,10 +20,7 @@ class AppConfig extends Equatable {
     this.recreateDatabase,
   });
 
-  @JsonKey(
-    includeIfNull: false,
-    toJson: _dbConfigToJson,
-  )
+  @JsonKey(includeIfNull: false)
   final DbConfig? dbConfig;
   final bool? debug;
   final bool? recreateDatabase;
@@ -38,9 +35,6 @@ class AppConfig extends Equatable {
   factory AppConfig.fromJson(Map<String, dynamic> json) =>
       _$AppConfigFromJson(json);
   Map<String, dynamic> get toJson => _$AppConfigToJson(this);
-
-  static Map<String, dynamic>? _dbConfigToJson(DbConfig? dbConfig) =>
-      dbConfig?.toJson;
 
   static String get _configBaseDirectory => 'assets/config';
   static String get _configBaseFile => 'config.json';
