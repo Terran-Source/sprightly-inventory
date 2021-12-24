@@ -11,6 +11,8 @@ import 'package:sprightly_inventory/core/config/enums.dart';
 
 import '../dao.dart';
 import '../db_config.dart';
+import '../tables/app_tables.dart';
+import '../tables/setup_tables.dart';
 
 export '../db_config.dart';
 
@@ -41,96 +43,6 @@ const List<Type> _setupTables = <Type>[
 const List<Type> _setupDaos = <Type>[
   SprightlySetupDao,
 ];
-
-// #region Sprightly tables
-@DataClassName("Member")
-class Members extends Table {
-  @override
-  String get tableName => "Member";
-
-  TextColumn get id => text().named('id').withLength(min: 16)();
-  TextColumn get name => text().named('name').withLength(max: 500)();
-  TextColumn get avatar => text().named('avatar').nullable()();
-  TextColumn get idType => text()
-      .named('idType')
-      .nullable()
-      .map(const EnumTextConverter<MemberIdType>(MemberIdType.values))();
-  TextColumn get idValue =>
-      text().named('idValue').nullable().withLength(max: 50)();
-  TextColumn get signature => text().named('signature').nullable()();
-  DateTimeColumn get createdOn => dateTime()
-      .named('createdOn')
-      .clientDefault(() => DateTime.now().toUtc())
-      .customConstraint("NOT NULL DEFAULT (STRFTIME('%s','now'))")();
-  DateTimeColumn get updatedOn => dateTime()
-      .named('updatedOn')
-      .nullable()
-      .clientDefault(() => DateTime.now().toUtc())();
-
-  @override
-  Set<Column> get primaryKey => {id};
-}
-
-@DataClassName("CustomProperty")
-class CustomProperties extends Table {
-  @override
-  String get tableName => "CustomProperty";
-
-  TextColumn get id => text().named('id').withLength(min: 16)();
-  TextColumn get parent => text().named('parent').withLength(min: 50)();
-  TextColumn get parentId => text().named('parentId').withLength(min: 16)();
-  TextColumn get propertyType => text()
-      .named('propertyType')
-      .map(const EnumTextConverter<PropertyType>(PropertyType.values))();
-  TextColumn get name => text().named('name').withLength(max: 250)();
-  DateTimeColumn get createdOn => dateTime()
-      .named('createdOn')
-      .clientDefault(() => DateTime.now().toUtc())
-      .customConstraint("NOT NULL DEFAULT (STRFTIME('%s','now'))")();
-  DateTimeColumn get updatedOn => dateTime()
-      .named('updatedOn')
-      .nullable()
-      .clientDefault(() => DateTime.now().toUtc())();
-
-  @override
-  Set<Column> get primaryKey => {id};
-}
-// #endregion Sprightly tables
-
-// #region SprightlySetup tables
-@DataClassName("AppSetting")
-class AppSettings extends Table {
-  @override
-  String get tableName => "AppSetting";
-
-  TextColumn get name => text().named('name').withLength(max: 50)();
-  TextColumn get value => text().named('value')();
-  TextColumn get type => text()
-      .named('type')
-      .nullable()
-      //.customConstraint(_typeConstraint)
-      .map(
-        const EnumTextConverter<PropertyType>(
-          PropertyType.values,
-          PropertyType.String,
-        ),
-      )();
-  DateTimeColumn get createdOn => dateTime()
-      .named('createdOn')
-      .clientDefault(() => DateTime.now().toUtc())
-      .customConstraint("NOT NULL DEFAULT (STRFTIME('%s','now'))")();
-  DateTimeColumn get updatedOn => dateTime()
-      .named('updatedOn')
-      .nullable()
-      .clientDefault(() => DateTime.now().toUtc())();
-
-  @override
-  Set<Column> get primaryKey => {name};
-
-  // String get _typeConstraint =>
-  //     'NULL ' + PropertyType.values.getConstraints('type');
-}
-// #endregion SprightlySetup tables
 
 // #region Custom query & classes
 class SprightlyQueries with ReadyOrNotMixin {
