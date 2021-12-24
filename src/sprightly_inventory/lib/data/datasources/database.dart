@@ -1,7 +1,8 @@
-library sprightly.moor_database;
+library sprightly.drift_database;
 
 import 'dart:async';
 
+import 'package:dart_marganam/db.dart';
 import 'package:dart_marganam/extensions.dart';
 import 'package:dart_marganam/utils.dart';
 import 'package:drift/drift.dart';
@@ -9,36 +10,14 @@ import 'package:drift/native.dart';
 import 'package:sprightly_inventory/core/config/enums.dart';
 
 import '../dao.dart';
+import '../db_config.dart';
+
+export '../db_config.dart';
 
 part 'database.g.dart';
 
 String get _appDataDbFile => 'sprightly_inventory_db.lite';
 String get _setupDataDbFile => 'sprightly_setup.lite';
-
-final dbConfig = DbConfig();
-
-class DbConfig {
-  factory DbConfig() => universal;
-  static DbConfig universal = DbConfig._();
-  DbConfig._();
-
-  String sqlSourceAsset = 'assets/queries_min';
-  String? sqlSourceWeb;
-  int hashedIdMinLength = 16;
-  int uniqueRetry = 5;
-
-  void update({
-    String? sqlSourceAsset,
-    String? sqlSourceWeb,
-    int? hashedIdMinLength,
-    int? uniqueRetry,
-  }) {
-    this.sqlSourceAsset = sqlSourceAsset ?? this.sqlSourceAsset;
-    this.sqlSourceWeb = sqlSourceWeb ?? this.sqlSourceWeb;
-    this.hashedIdMinLength = hashedIdMinLength ?? this.hashedIdMinLength;
-    this.uniqueRetry = uniqueRetry ?? this.uniqueRetry;
-  }
-}
 
 const List<Type> _appTables = <Type>[
   Members,
@@ -154,107 +133,6 @@ class AppSettings extends Table {
 // #endregion SprightlySetup tables
 
 // #region Custom query & classes
-/// asset path for custom sql files
-Future<String> _getSqlQueryFromAsset(String fileName) =>
-    getAssetText(fileName, assetDirectory: dbConfig.sqlSourceAsset);
-Future<String?> _getSqlQueryFromRemote(CustomQuery customQuery) =>
-    RemoteFileCache.universal.getRemoteText(
-      customQuery.source,
-      identifier: customQuery.identifier,
-      headers: customQuery.headers,
-    );
-
-/// Used to get complex queries from outside.
-///
-/// Either a filename(without extension) inside [dbConfig.sqlSourceAsset]
-/// or an accessible web address of the file
-///
-/// Example:
-/// ```dart
-/// var customQueryFromFile = CustomQuery.fromAsset('queryFileName');
-/// // or
-/// var customQueryFromWeb = CustomQuery.fromWeb('customQueryFromWeb',
-///   'https://example.com/some/source/queryFileName.sql');
-/// // or if any custom header is required
-/// var customQueryFromWeb = CustomQuery.fromWeb('customQueryFromWeb',
-///   'https://example.com/some/source/queryFileName.sql',
-///   headers: {HttpHeaders.authorizationHeader: 'Bearer $token'});
-/// ```
-class CustomQuery {
-  /// Either a filename(without extension) inside [dbConfig.sqlSourceAsset]
-  /// or an accessible web address of the file
-  ///
-  /// Example:
-  /// ```dart
-  /// var customQueryFromFile = CustomQuery.fromAsset('queryFileName');
-  /// // or
-  /// var customQueryFromWeb = CustomQuery.fromWeb('customQueryFromWeb',
-  ///   'https://example.com/some/source/queryFileName.sql');
-  /// // or if any custom header is required
-  /// var customQueryFromWeb = CustomQuery.fromWeb('customQueryFromWeb',
-  ///   'https://example.com/some/source/queryFileName.sql',
-  ///   headers: {HttpHeaders.authorizationHeader: 'Bearer $token'});
-  /// ```
-  final String source;
-  final String identifier;
-  final ResourceFrom _from;
-  final Map<String, String> headers;
-
-  String? _query;
-
-  CustomQuery._(
-    this.source,
-    this._from,
-    this.identifier, {
-    this.headers = const <String, String>{},
-  });
-
-  factory CustomQuery.fromAsset(
-    String fileNameWithoutExtension, {
-    String? identifier,
-  }) =>
-      CustomQuery._(
-        fileNameWithoutExtension,
-        ResourceFrom.Asset,
-        identifier ?? fileNameWithoutExtension,
-      );
-
-  factory CustomQuery.fromWeb(
-    String identifier,
-    String address, {
-    Map<String, String> headers = const <String, String>{},
-  }) {
-    Uri.parse(address);
-    return CustomQuery._(
-      address,
-      ResourceFrom.Web,
-      identifier,
-      headers: headers,
-    );
-  }
-
-  Future<String?> _load() async {
-    switch (_from) {
-      case ResourceFrom.Asset:
-        // return compute(_getSqlQueryFromAsset, source);
-        return _getSqlQueryFromAsset(source);
-      case ResourceFrom.Web:
-        // return compute(_getSqlQueryFromRemote, this);
-        return _getSqlQueryFromRemote(this);
-      default:
-        return null;
-    }
-  }
-
-  /// Asynchronously load the sql file content
-  Future<String?> load() async => _query ??= await _load();
-
-  /// the actual sql statements after the [load] is called at least once
-  String? get query => _query;
-
-  bool get isLoaded => (_query ?? '').isNotEmpty;
-}
-
 class SprightlyQueries with ReadyOrNotMixin {
   factory SprightlyQueries() => universal;
 
@@ -285,15 +163,19 @@ class SprightlyQueries with ReadyOrNotMixin {
 
   // Migration queries
   Map<int, CustomQuery> dataMigrations = {
-    // 1: CustomQuery.fromWeb("sprightly.moor_database.dataMigrationFrom1",
+    // 1: CustomQuery.fromWeb("sprightly.drift_database.dataMigrationFrom1",
     //     'https://example.com/some/source/dataMigrationFrom1.sql'),
   };
   Map<int, CustomQuery> setupMigrations = {
-    // 1: CustomQuery.fromWeb("sprightly.moor_database.setupMigrationFrom1",
+    // 1: CustomQuery.fromWeb("sprightly.drift_database.setupMigrationFrom1",
     //     'https://example.com/some/source/setupMigrationFrom1.sql'),
   };
 
   Future _getReady() async {
+    // Required to set `CustomQuery.sqlSourceAssetDirectory` for fetching custom
+    // query files from asset
+    CustomQuery.sqlSourceAssetDirectory = dbConfig.sqlSourceAsset;
+
     // Required for fetching file from web
     await RemoteFileCache.universal.getReady();
 
