@@ -1,4 +1,4 @@
-import 'package:dart_marganam/db.dart';
+import 'package:dart_marganam/db/enums.dart';
 
 void updateDbEnumTypes() {
   enumTypes[MemberIdType] = MemberIdType.values;
