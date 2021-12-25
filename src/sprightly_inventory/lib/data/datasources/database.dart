@@ -57,6 +57,8 @@ class SprightlyDao extends DatabaseAccessor<SprightlyDatabase>
       },
       sqlSourceAssetDirectory: dbConfig.sqlSourceAsset,
     );
+    hashMinLength = dbConfig.hashedIdMinLength;
+    uniqueRetry = dbConfig.uniqueRetry;
   }
 
   @override
@@ -89,13 +91,7 @@ class SprightlyDao extends DatabaseAccessor<SprightlyDatabase>
     MemberIdType idType = MemberIdType.NickName,
     String? signature,
   }) async {
-    final _id = id ??
-        await uniqueId(
-          members.actualTableName,
-          [idValue],
-          hashMinLength: dbConfig.hashedIdMinLength,
-          uniqueRetry: dbConfig.uniqueRetry,
-        );
+    final _id = id ?? await uniqueId(members.actualTableName, [idValue]);
     final membersComp = MembersCompanion.insert(
       id: _id,
       name: name,
@@ -158,6 +154,8 @@ class SprightlySetupDao extends DatabaseAccessor<SprightlySetupDatabase>
       },
       sqlSourceAssetDirectory: dbConfig.sqlSourceAsset,
     );
+    hashMinLength = dbConfig.hashedIdMinLength;
+    uniqueRetry = dbConfig.uniqueRetry;
   }
 
   @override
