@@ -165,7 +165,7 @@ abstract class SystemDao extends AppDao {
   // Future<int> deleteGroup(String groupId);
 }
 
-abstract class SettingsDao extends AppDao {
+abstract class SetupDao extends AppDao {
   AppInformation get appInformation;
   List<AppSetting> get allAppSettings;
   // List<AppFont> get allAppFonts;

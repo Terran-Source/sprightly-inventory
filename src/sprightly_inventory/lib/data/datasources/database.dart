@@ -140,7 +140,7 @@ class SprightlyDao extends DatabaseAccessor<SprightlyDatabase>
 )
 class SprightlySetupDao extends DatabaseAccessor<SprightlySetupDatabase>
     with _$SprightlySetupDaoMixin, DaoMixin, ReadyOrNotMixin
-    implements SettingsDao {
+    implements SetupDao {
   SprightlySetupDao(SprightlySetupDatabase _db) : super(_db) {
     getReadyWorker = _getReady;
     queries = QuerySet(

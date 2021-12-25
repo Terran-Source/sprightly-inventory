@@ -36,8 +36,7 @@ Future<Iterable<Initiated>> initiate(
   );
   kiwiContainer
     ..registerSingleton((container) => settingsDb)
-    ..registerSingleton<SettingsDao>(
-        (container) => settingsDb.sprightlySetupDao);
+    ..registerSingleton<SetupDao>((container) => settingsDb.sprightlySetupDao);
   result.add(settingsDb);
 
   // initialize global dao
