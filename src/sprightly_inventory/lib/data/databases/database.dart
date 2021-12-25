@@ -14,8 +14,6 @@ import '../db_config.dart';
 import '../tables/app_tables.dart';
 import '../tables/setup_tables.dart';
 
-export '../db_config.dart';
-
 part 'database.g.dart';
 
 String get _appDataDbFile => 'sprightly_inventory_db.lite';
