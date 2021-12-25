@@ -6,7 +6,6 @@ import 'package:dart_marganam/db.dart';
 import 'package:dart_marganam/extensions.dart';
 import 'package:dart_marganam/utils.dart';
 import 'package:drift/drift.dart';
-import 'package:drift/native.dart';
 import 'package:sprightly_inventory/core/config/enums.dart';
 
 import '../dao.dart';
@@ -253,25 +252,6 @@ class SprightlySetupDao extends DatabaseAccessor<SprightlySetupDatabase>
   // Stream<List<ColorCombo>> watchColorCombos() => select(colorCombos).watch();
 }
 
-LazyDatabase _openConnection(
-  String dbFile, {
-  bool? isSupportFile,
-  bool? logStatements,
-  bool? recreateDatabase,
-  DatabaseSetup? setup,
-}) =>
-    LazyDatabase(
-      () async => NativeDatabase(
-        await getFile(
-          dbFile,
-          isSupportFile: isSupportFile ?? false,
-          recreateFile: recreateDatabase ?? false,
-        ),
-        logStatements: logStatements ?? false,
-        setup: setup,
-      ),
-    );
-
 @DriftDatabase(
   tables: _appTables,
   daos: _appDaos,
@@ -286,7 +266,7 @@ class SprightlyDatabase extends _$SprightlyDatabase
     this.enableDebug,
     this.recreateDatabase,
   }) : super(
-          _openConnection(
+          openConnection(
             dbFile ?? _appDataDbFile,
             logStatements: enableDebug,
             recreateDatabase: recreateDatabase,
@@ -332,7 +312,7 @@ class SprightlySetupDatabase extends _$SprightlySetupDatabase
     this.enableDebug,
     this.recreateDatabase,
   }) : super(
-          _openConnection(
+          openConnection(
             dbFile ?? _setupDataDbFile,
             logStatements: enableDebug,
             recreateDatabase: recreateDatabase,
