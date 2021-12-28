@@ -3,12 +3,11 @@ library sprightly.config;
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dart_marganam/extensions/enum.dart';
-import 'package:dart_marganam/utils/file_provider.dart';
-import 'package:dart_marganam/utils/formatted_exception.dart';
+// import 'package:dart_marganam/extensions/enum.dart';
+import 'package:dart_marganam/extensions.dart';
+import 'package:dart_marganam/utils.dart'
+    show FormattedException, Interpolation, getAssetText;
 import 'package:equatable/equatable.dart';
-import 'package:extend/extend.dart';
-import 'package:interpolation/interpolation.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:path/path.dart' as p;
 import 'package:sprightly_inventory/core/config/enums.dart';

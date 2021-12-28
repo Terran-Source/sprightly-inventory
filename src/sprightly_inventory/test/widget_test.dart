@@ -8,12 +8,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:sprightly_inventory/main.dart';
+import 'package:sprightly_inventory/core/config/enums.dart';
+import 'package:sprightly_inventory/ui/starter/starter_app.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(MyApp());
+    await tester.pumpWidget(const StarterApp(environment: Environment.prod));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);

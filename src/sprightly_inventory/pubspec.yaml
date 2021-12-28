@@ -22,12 +22,9 @@ dependencies:
   drift: ^1.1.1
 
   equatable: ^2.0.3
-  extend: ^0.1.1
 
   flutter:
     sdk: flutter
-
-  interpolation: ^2.1.2
 
   # DI
   json_annotation: ^4.4.0

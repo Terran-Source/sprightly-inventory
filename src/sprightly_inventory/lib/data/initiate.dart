@@ -1,4 +1,4 @@
-import 'package:dart_marganam/utils/initiated.dart';
+import 'package:dart_marganam/utils.dart' show Initiated;
 import 'package:kiwi/kiwi.dart';
 import 'package:sprightly_inventory/core/config/app_config.dart';
 import 'package:sprightly_inventory/core/config/enums.dart';

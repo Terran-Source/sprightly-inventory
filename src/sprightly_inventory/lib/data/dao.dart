@@ -2,8 +2,7 @@ library sprightly.dao;
 
 import 'dart:async';
 
-import 'package:dart_marganam/utils/initiated.dart';
-import 'package:dart_marganam/utils/ready_or_not.dart';
+import 'package:dart_marganam/utils.dart' show Initiated, ReadyOrNotMixin;
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sprightly_inventory/core/config/enums.dart';
 

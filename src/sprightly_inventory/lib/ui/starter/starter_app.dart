@@ -1,4 +1,4 @@
-import 'package:dart_marganam/widgets/stateful_wrapper.dart';
+import 'package:dart_marganam/widgets.dart' show StatefulWrapper;
 import 'package:flutter/material.dart';
 import 'package:sprightly_inventory/core/config/enums.dart';
 import 'package:sprightly_inventory/core/initiate.dart';

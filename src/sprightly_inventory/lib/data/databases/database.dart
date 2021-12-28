@@ -2,9 +2,11 @@ library sprightly.drift_database;
 
 import 'dart:async';
 
-import 'package:dart_marganam/db.dart';
-import 'package:dart_marganam/extensions.dart';
-import 'package:dart_marganam/utils.dart';
+import 'package:dart_marganam/db.dart'
+    show CustomQuery, CustomQueryType, DaoMixin, QuerySet, openConnection;
+import 'package:dart_marganam/extensions.dart' show EnumTextConverter;
+import 'package:dart_marganam/utils.dart'
+    show Disposable, Initiated, ReadyOrNotMixin;
 import 'package:drift/drift.dart';
 import 'package:sprightly_inventory/core/config/enums.dart';
 
@@ -179,10 +181,10 @@ class SprightlySetupDao extends DatabaseAccessor<SprightlySetupDatabase>
     }
     if (details.wasCreated || details.hadUpgrade) {
       // // * TODO: **TEMP** in case of _Web_ db
-      // await addAppSetting('dbVersion', '0', PropertyType.Number);
-      // await addAppSetting('primarySetupComplete', '0', PropertyType.Bool);
-      // await addAppSetting('themeMode', 'Dark', PropertyType.String);
-      // await addAppSetting('debug', '0', PropertyType.Bool);
+      // await addAppSetting('dbVersion', '0', type: PropertyType.Number);
+      // await addAppSetting('primarySetupComplete', '0', type: PropertyType.Bool);
+      // await addAppSetting('themeMode', 'Dark', type: PropertyType.String);
+      // await addAppSetting('debug', '0', type: PropertyType.Bool);
 
       // sync dbVersion
       await updateAppSetting(

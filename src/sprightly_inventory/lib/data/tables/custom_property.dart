@@ -1,4 +1,4 @@
-import 'package:dart_marganam/extensions/drift/enum_converter.dart';
+import 'package:dart_marganam/extensions.dart' show EnumTextConverter;
 import 'package:drift/drift.dart';
 import 'package:sprightly_inventory/core/config/enums.dart';
 
