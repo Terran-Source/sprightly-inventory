@@ -28,15 +28,15 @@ Future<Iterable<Initiated>> initiate(
     ..registerSingleton<SystemDao>((container) => dataDb.sprightlyDao);
   result.add(dataDb);
 
-  final settingsDb = SprightlySetupDatabase(
+  final setupDb = SprightlySetupDatabase(
     dbFile: configurations.dbConfig?.setupDataDbFile,
     enableDebug: configurations.debug,
     recreateDatabase: configurations.recreateDatabase,
   );
   kiwiContainer
-    ..registerSingleton((container) => settingsDb)
-    ..registerSingleton<SetupDao>((container) => settingsDb.sprightlySetupDao);
-  result.add(settingsDb);
+    ..registerSingleton((container) => setupDb)
+    ..registerSingleton<SetupDao>((container) => setupDb.sprightlySetupDao);
+  result.add(setupDb);
 
   // initialize global dao
   final appInfo = AppInformation();
