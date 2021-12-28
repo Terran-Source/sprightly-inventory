@@ -28,25 +28,38 @@
 </head>
 <body>
   <!-- This script installs service_worker.js to provide PWA functionality to
-       application. For more information, see:
-       https://developers.google.com/web/fundamentals/primers/service-workers -->
+      application. For more information, see:
+      https://developers.google.com/web/fundamentals/primers/service-workers -->
   <script>
     var serviceWorkerVersion = null;
     var scriptLoaded = false;
+    var loadedScripts = [];
+    var scriptsToLoad = ['scripts/sql-wasm.js'];
+    function loadJsScript(jsFileSrc) {
+      if(loadedScripts.indexOf(jsFileSrc)>=0) return;
+      var scriptTag = document.createElement('script');
+      scriptTag.src = jsFileSrc;
+      scriptTag.type = 'application/javascript';
+      document.body.append(scriptTag);
+      loadedScripts.push(jsFileSrc);
+    }
+
+    function loadJsScripts(jsFileSrcList){
+      jsFileSrcList.every(loadJsScript);
+    }
+
     function loadMainDartJs() {
       if (scriptLoaded) {
         return;
       }
       scriptLoaded = true;
-      var scriptTag = document.createElement('script');
-      scriptTag.src = 'main.dart.js';
-      scriptTag.type = 'application/javascript';
-      document.body.append(scriptTag);
+      loadJsScripts(['main.dart.js']);
     }
 
     if ('serviceWorker' in navigator) {
       // Service workers are supported. Use them.
       window.addEventListener('load', function () {
+        loadJsScripts(scriptsToLoad);
         // Wait for registration to finish before dropping the <script> tag.
         // Otherwise, the browser will load the script multiple times,
         // potentially different versions.
@@ -91,6 +104,7 @@
       });
     } else {
       // Service workers not supported. Just drop the <script> tag.
+      loadJsScripts(scriptsToLoad);
       loadMainDartJs();
     }
   </script>
