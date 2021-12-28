@@ -1,17 +1,19 @@
-const Map<Type, List> enumTypes = {
-  MemberIdType: MemberIdType.values,
-  GroupType: GroupType.values,
-  AccountType: AccountType.values,
-  CategoryType: CategoryType.values,
-  TransactionTag: TransactionTag.values,
-  GroupActivityType: GroupActivityType.values,
-  FontType: FontType.values,
-  FontStyle: FontStyle.values,
-  ThemeMode: ThemeMode.values,
-  PropertyType: PropertyType.values,
-  ResourceFrom: ResourceFrom.values,
-  Environment: Environment.values,
-};
+import 'package:dart_marganam/db/enums.dart';
+
+void updateDbEnumTypes() {
+  extendDbEnumType(MemberIdType.values);
+  extendDbEnumType(GroupType.values);
+  extendDbEnumType(AccountType.values);
+  extendDbEnumType(CategoryType.values);
+  extendDbEnumType(TransactionTag.values);
+  extendDbEnumType(GroupActivityType.values);
+  extendDbEnumType(FontType.values);
+  extendDbEnumType(FontStyle.values);
+  extendDbEnumType(ThemeMode.values);
+  extendDbEnumType(PropertyType.values);
+  extendDbEnumType(ResourceFrom.values);
+  extendDbEnumType(Environment.values);
+}
 
 /// Database enums
 ///

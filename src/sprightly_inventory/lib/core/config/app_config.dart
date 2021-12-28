@@ -3,9 +3,12 @@ library sprightly.config;
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dart_marganam/extensions.dart';
-import 'package:dart_marganam/utils.dart';
+import 'package:dart_marganam/extensions/enum.dart';
+import 'package:dart_marganam/utils/file_provider.dart';
+import 'package:dart_marganam/utils/formatted_exception.dart';
 import 'package:equatable/equatable.dart';
+import 'package:extend/extend.dart';
+import 'package:interpolation/interpolation.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:path/path.dart' as p;
 import 'package:sprightly_inventory/core/config/enums.dart';
@@ -34,7 +37,7 @@ class AppConfig extends Equatable {
 
   factory AppConfig.fromJson(Map<String, dynamic> json) =>
       _$AppConfigFromJson(json);
-  Map<String, dynamic> get toJson => _$AppConfigToJson(this);
+  Map<String, dynamic> toJson() => _$AppConfigToJson(this);
 
   static String get _configBaseDirectory => 'assets/config';
   static String get _configBaseFile => 'config.json';
@@ -68,7 +71,7 @@ class AppConfig extends Equatable {
     json ??= (json?.extend(jsonEnv!) as Map<String, dynamic>?) ?? jsonEnv;
     if (null != json) {
       final _interpolation = Interpolation();
-      json.extend({'environment': environment});
+      json.extend({'environment': environment.toEnumString()});
       return AppConfig.fromJson(
         _interpolation.resolve(json) as Map<String, dynamic>,
       );
@@ -117,5 +120,5 @@ class DbConfig extends Equatable {
 
   factory DbConfig.fromJson(Map<String, dynamic> json) =>
       _$DbConfigFromJson(json);
-  Map<String, dynamic> get toJson => _$DbConfigToJson(this);
+  Map<String, dynamic> toJson() => _$DbConfigToJson(this);
 }

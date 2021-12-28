@@ -1,0 +1,2 @@
+-- optimizeDb
+VACUUM;

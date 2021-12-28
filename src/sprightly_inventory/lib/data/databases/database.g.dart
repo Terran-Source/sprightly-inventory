@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of sprightly.moor_database;
+part of sprightly.drift_database;
 
 // **************************************************************************
 // MoorGenerator

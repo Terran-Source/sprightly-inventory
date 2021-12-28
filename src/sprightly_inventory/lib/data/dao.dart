@@ -2,11 +2,12 @@ library sprightly.dao;
 
 import 'dart:async';
 
-import 'package:dart_marganam/utils.dart';
+import 'package:dart_marganam/utils/initiated.dart';
+import 'package:dart_marganam/utils/ready_or_not.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sprightly_inventory/core/config/enums.dart';
 
-import 'datasources/database.dart';
+import 'databases/database.dart';
 
 // String get groupAccountPrefix => 'GroupAccount';
 
@@ -165,7 +166,7 @@ abstract class SystemDao extends AppDao {
   // Future<int> deleteGroup(String groupId);
 }
 
-abstract class SettingsDao extends AppDao {
+abstract class SetupDao extends AppDao {
   AppInformation get appInformation;
   List<AppSetting> get allAppSettings;
   // List<AppFont> get allAppFonts;
@@ -175,6 +176,11 @@ abstract class SettingsDao extends AppDao {
   Future<List<AppSetting>> getAppSettings();
   Stream<List<AppSetting>> watchAppSettings();
   Future<AppSetting> getAppSetting(String name);
+  Future<AppSetting?> addAppSetting(
+    String name,
+    String value, {
+    PropertyType type = PropertyType.String,
+  });
   Future<bool> updateAppSetting(String name, String value, {PropertyType type});
   Future<bool> updateAppSettings(Map<String, String> settings);
 
