@@ -224,9 +224,9 @@ class SprightlySetupDao extends DatabaseAccessor<SprightlySetupDatabase>
   @override
   Future<AppSetting?> addAppSetting(
     String name,
-    String value,
-    PropertyType type,
-  ) async {
+    String value, {
+    PropertyType type = PropertyType.String,
+  }) async {
     final appSetting = AppSettingsCompanion.insert(
       name: name,
       value: value,
