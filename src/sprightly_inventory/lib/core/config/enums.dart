@@ -1,18 +1,18 @@
 import 'package:dart_marganam/db/enums.dart';
 
 void updateDbEnumTypes() {
-  enumTypes[MemberIdType] = MemberIdType.values;
-  enumTypes[GroupType] = GroupType.values;
-  enumTypes[AccountType] = AccountType.values;
-  enumTypes[CategoryType] = CategoryType.values;
-  enumTypes[TransactionTag] = TransactionTag.values;
-  enumTypes[GroupActivityType] = GroupActivityType.values;
-  enumTypes[FontType] = FontType.values;
-  enumTypes[FontStyle] = FontStyle.values;
-  enumTypes[ThemeMode] = ThemeMode.values;
-  enumTypes[PropertyType] = PropertyType.values;
-  enumTypes[ResourceFrom] = ResourceFrom.values;
-  enumTypes[Environment] = Environment.values;
+  extendDbEnumType(MemberIdType.values);
+  extendDbEnumType(GroupType.values);
+  extendDbEnumType(AccountType.values);
+  extendDbEnumType(CategoryType.values);
+  extendDbEnumType(TransactionTag.values);
+  extendDbEnumType(GroupActivityType.values);
+  extendDbEnumType(FontType.values);
+  extendDbEnumType(FontStyle.values);
+  extendDbEnumType(ThemeMode.values);
+  extendDbEnumType(PropertyType.values);
+  extendDbEnumType(ResourceFrom.values);
+  extendDbEnumType(Environment.values);
 }
 
 /// Database enums

@@ -176,6 +176,11 @@ abstract class SetupDao extends AppDao {
   Future<List<AppSetting>> getAppSettings();
   Stream<List<AppSetting>> watchAppSettings();
   Future<AppSetting> getAppSetting(String name);
+  Future<AppSetting?> addAppSetting(
+    String name,
+    String value,
+    PropertyType type,
+  );
   Future<bool> updateAppSetting(String name, String value, {PropertyType type});
   Future<bool> updateAppSettings(Map<String, String> settings);
 

@@ -62,14 +62,14 @@ class SprightlyDao extends DatabaseAccessor<SprightlyDatabase>
   bool get ready => super.daoMixinReady && super.ready;
 
   Future _getReady() async {
+    updateDbEnumTypes();
     await super.getDaoMixinReady();
   }
 
   @override
   Future<void> beforeOpen(OpeningDetails details, Migrator m) async {
-    updateDbEnumTypes();
     await getReady();
-    super.beforeOpen(details, m);
+    await super.beforeOpen(details, m);
     if (details.wasCreated) {
       // TODO: do first time activity
     }
@@ -144,6 +144,7 @@ class SprightlySetupDao extends DatabaseAccessor<SprightlySetupDatabase>
       queries: {
         CustomQueryType.defaultStartup.name:
             CustomQuery.fromAsset("defaultStartupStatement.sql"),
+        // ! TODO: _Web_ db doesn't support multi-statement, yet.
         CustomQueryType.dataInitiation.name:
             CustomQuery.fromAsset("setupInitiation.sql"),
         CustomQueryType.openingPragma.name:
@@ -159,6 +160,7 @@ class SprightlySetupDao extends DatabaseAccessor<SprightlySetupDatabase>
   bool get ready => super.daoMixinReady && _appInformation.ready && super.ready;
 
   Future _getReady() async {
+    updateDbEnumTypes();
     await super.getDaoMixinReady();
     await _appInformation.getReady();
     _allAppSettings = await getAppSettings();
@@ -169,19 +171,25 @@ class SprightlySetupDao extends DatabaseAccessor<SprightlySetupDatabase>
 
   @override
   Future<void> beforeOpen(OpeningDetails details, Migrator m) async {
-    updateDbEnumTypes();
     await getReady();
-    super.beforeOpen(details, m);
+    await super.beforeOpen(details, m);
     if (details.wasCreated) {
       // TODO: do first time activity
       // already done through queries.setupInitiation
     }
     if (details.wasCreated || details.hadUpgrade) {
+      // // * TODO: **TEMP** in case of _Web_ db
+      // await addAppSetting('dbVersion', '0', PropertyType.Number);
+      // await addAppSetting('primarySetupComplete', '0', PropertyType.Bool);
+      // await addAppSetting('themeMode', 'Dark', PropertyType.String);
+      // await addAppSetting('debug', '0', PropertyType.Bool);
+
       // sync dbVersion
       await updateAppSetting(
         'dbVersion',
         attachedDatabase.schemaVersion.toString(),
       );
+      // print('allAppSetting: $_allAppSettings');
     }
   }
 
@@ -212,6 +220,23 @@ class SprightlySetupDao extends DatabaseAccessor<SprightlySetupDatabase>
           name,
         ),
       );
+
+  @override
+  Future<AppSetting?> addAppSetting(
+    String name,
+    String value,
+    PropertyType type,
+  ) async {
+    final appSetting = AppSettingsCompanion.insert(
+      name: name,
+      value: value,
+      type: Value(type),
+    );
+    if (await into(appSettings).insert(appSetting) > 0) {
+      return getAppSetting(name);
+    }
+    return null;
+  }
 
   @override
   Future<bool> updateAppSetting(

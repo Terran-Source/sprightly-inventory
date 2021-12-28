@@ -37,7 +37,7 @@ class AppConfig extends Equatable {
 
   factory AppConfig.fromJson(Map<String, dynamic> json) =>
       _$AppConfigFromJson(json);
-  Map<String, dynamic> get toJson => _$AppConfigToJson(this);
+  Map<String, dynamic> toJson() => _$AppConfigToJson(this);
 
   static String get _configBaseDirectory => 'assets/config';
   static String get _configBaseFile => 'config.json';
@@ -71,7 +71,7 @@ class AppConfig extends Equatable {
     json ??= (json?.extend(jsonEnv!) as Map<String, dynamic>?) ?? jsonEnv;
     if (null != json) {
       final _interpolation = Interpolation();
-      json.extend({'environment': environment});
+      json.extend({'environment': environment.toEnumString()});
       return AppConfig.fromJson(
         _interpolation.resolve(json) as Map<String, dynamic>,
       );
@@ -120,5 +120,5 @@ class DbConfig extends Equatable {
 
   factory DbConfig.fromJson(Map<String, dynamic> json) =>
       _$DbConfigFromJson(json);
-  Map<String, dynamic> get toJson => _$DbConfigToJson(this);
+  Map<String, dynamic> toJson() => _$DbConfigToJson(this);
 }
