@@ -1,6 +1,5 @@
 import 'package:dart_marganam/utils.dart'
     show ExceptionPackage, FormattedException, Initiated, RemoteFileCache;
-import 'package:flutter/foundation.dart';
 import 'package:kiwi/kiwi.dart';
 import 'package:sprightly_inventory/core/config/app_config.dart';
 import 'package:sprightly_inventory/core/config/constants.dart' as constants;
@@ -17,11 +16,10 @@ Future<bool> initiate({Environment environment = Environment.prod}) async {
     kiwiContainer.registerSingleton((container) => configurations);
 
     initiates.add(ExceptionPackage());
-    if (!kIsWeb) {
-      final remoteFileCache = RemoteFileCache();
-      kiwiContainer.registerSingleton((container) => remoteFileCache);
-      initiates.add(remoteFileCache);
-    }
+
+    final remoteFileCache = RemoteFileCache();
+    kiwiContainer.registerSingleton((container) => remoteFileCache);
+    initiates.add(remoteFileCache);
 
     // initiate database
     initiates.addAll(
