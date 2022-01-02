@@ -49,6 +49,7 @@ class SprightlyDao extends DatabaseAccessor<SprightlyDatabase>
       queries: {
         CustomQueryType.defaultStartup.name:
             CustomQuery.fromAsset("defaultStartupStatement.sql"),
+        // ! TODO: _Web_ db doesn't support multi-statement, yet.
         CustomQueryType.dataInitiation.name:
             CustomQuery.fromAsset("dataInitiation.sql"),
         CustomQueryType.openingPragma.name:
@@ -177,22 +178,69 @@ class SprightlySetupDao extends DatabaseAccessor<SprightlySetupDatabase>
     await super.beforeOpen(details, m);
     if (details.wasCreated) {
       // TODO: do first time activity
-      // already done through queries.setupInitiation
-    }
-    if (details.wasCreated || details.hadUpgrade) {
-      // // * TODO: **TEMP** in case of _Web_ db
-      // await addAppSetting('dbVersion', '0', type: PropertyType.Number);
-      // await addAppSetting('primarySetupComplete', '0', type: PropertyType.Bool);
-      // await addAppSetting('themeMode', 'Dark', type: PropertyType.String);
-      // await addAppSetting('debug', '0', type: PropertyType.Bool);
+      await addAppSetting(
+        'appName',
+        _appInformation.appName,
+        batchOperation: true,
+      );
+      await addAppSetting(
+        'version',
+        _appInformation.version,
+        batchOperation: true,
+      );
+      await addAppSetting(
+        'packageName',
+        _appInformation.packageName,
+        batchOperation: true,
+      );
+      await addAppSetting('buildNumber', _appInformation.buildNumber);
 
+      // // * TODO: **TEMP** in case of _Web_ db
+      // await addAppSetting(
+      //   'dbVersion',
+      //   '0',
+      //   type: PropertyType.Number,
+      //   batchOperation: true,
+      // );
+      // await addAppSetting(
+      //   'primarySetupComplete',
+      //   '0',
+      //   type: PropertyType.Bool,
+      //   batchOperation: true,
+      // );
+      // await addAppSetting(
+      //   'themeMode',
+      //   ThemeMode.Dark.name,
+      //   batchOperation: true,
+      // );
+      // await addAppSetting(
+      //   'debug',
+      //   '0',
+      //   type: PropertyType.Bool,
+      // );
+    }
+
+    if (details.wasCreated || details.hadUpgrade) {
       // sync dbVersion
       await updateAppSetting(
         'dbVersion',
         attachedDatabase.schemaVersion.toString(),
       );
-      // print('allAppSetting: $_allAppSettings');
     }
+
+    if (details.hadUpgrade) {
+      // sync appInformation again
+      await updateAppSettings({
+        'appName': _appInformation.appName,
+        'version': _appInformation.version,
+        // 'packageName': _appInformation.packageName, // No need
+        'buildNumber': _appInformation.buildNumber,
+      });
+    }
+    // print('db status:'
+    //     '\n\tNew Db: ${details.wasCreated}, Upgraded: ${details.hadUpgrade}'
+    //     '\n\tOld v: ${details.versionBefore}, New v: ${details.versionNow}');
+    // print('allAppSetting: $_allAppSettings');
   }
 
   final _appInformation = AppInformation();
@@ -228,6 +276,7 @@ class SprightlySetupDao extends DatabaseAccessor<SprightlySetupDatabase>
     String name,
     String value, {
     PropertyType type = PropertyType.String,
+    bool batchOperation = false,
   }) async {
     final appSetting = AppSettingsCompanion.insert(
       name: name,
@@ -235,6 +284,7 @@ class SprightlySetupDao extends DatabaseAccessor<SprightlySetupDatabase>
       type: Value(type),
     );
     if (await into(appSettings).insert(appSetting) > 0) {
+      if (!batchOperation) _allAppSettings = await getAppSettings();
       return getAppSetting(name);
     }
     return null;
