@@ -10,19 +10,22 @@ generator prismaClient {
 }
 
 model Post {
-  id        BigInt   @id @default(autoincrement())
-  title     String
-  authorId  BigInt
-  published Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  author    User     @relation(fields: [authorId], references: [id])
+  id          BigInt    @id @default(autoincrement())
+  title       String
+  authorId    BigInt
+  body        String    @default("")
+  published   Boolean   @default(false)
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  author      User      @relation(fields: [authorId], references: [id])
 }
 
 model User {
   id        BigInt   @id @default(autoincrement())
   email     String   @unique
   name      String?
+  bio       String?  @map(name: "biography")
   role      String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

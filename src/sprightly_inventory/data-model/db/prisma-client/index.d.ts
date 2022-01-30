@@ -20,7 +20,9 @@ export type Post = {
   id: bigint
   title: string
   authorId: bigint
+  body: string
   published: boolean
+  publishedAt: Date | null
   createdAt: Date
   updatedAt: Date
 }
@@ -33,6 +35,7 @@ export type User = {
   id: bigint
   email: string
   name: string | null
+  bio: string | null
   role: string | null
   createdAt: Date
   updatedAt: Date
@@ -846,7 +849,9 @@ export namespace Prisma {
     id: bigint | null
     title: string | null
     authorId: bigint | null
+    body: string | null
     published: boolean | null
+    publishedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -855,7 +860,9 @@ export namespace Prisma {
     id: bigint | null
     title: string | null
     authorId: bigint | null
+    body: string | null
     published: boolean | null
+    publishedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -864,7 +871,9 @@ export namespace Prisma {
     id: number
     title: number
     authorId: number
+    body: number
     published: number
+    publishedAt: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -885,7 +894,9 @@ export namespace Prisma {
     id?: true
     title?: true
     authorId?: true
+    body?: true
     published?: true
+    publishedAt?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -894,7 +905,9 @@ export namespace Prisma {
     id?: true
     title?: true
     authorId?: true
+    body?: true
     published?: true
+    publishedAt?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -903,7 +916,9 @@ export namespace Prisma {
     id?: true
     title?: true
     authorId?: true
+    body?: true
     published?: true
+    publishedAt?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -1005,7 +1020,9 @@ export namespace Prisma {
     id: bigint
     title: string
     authorId: bigint
+    body: string
     published: boolean
+    publishedAt: Date | null
     createdAt: Date
     updatedAt: Date
     _count: PostCountAggregateOutputType | null
@@ -1033,7 +1050,9 @@ export namespace Prisma {
     id?: boolean
     title?: boolean
     authorId?: boolean
+    body?: boolean
     published?: boolean
+    publishedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     author?: boolean | UserArgs
@@ -1716,6 +1735,7 @@ export namespace Prisma {
     id: bigint | null
     email: string | null
     name: string | null
+    bio: string | null
     role: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -1725,6 +1745,7 @@ export namespace Prisma {
     id: bigint | null
     email: string | null
     name: string | null
+    bio: string | null
     role: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -1734,6 +1755,7 @@ export namespace Prisma {
     id: number
     email: number
     name: number
+    bio: number
     role: number
     createdAt: number
     updatedAt: number
@@ -1753,6 +1775,7 @@ export namespace Prisma {
     id?: true
     email?: true
     name?: true
+    bio?: true
     role?: true
     createdAt?: true
     updatedAt?: true
@@ -1762,6 +1785,7 @@ export namespace Prisma {
     id?: true
     email?: true
     name?: true
+    bio?: true
     role?: true
     createdAt?: true
     updatedAt?: true
@@ -1771,6 +1795,7 @@ export namespace Prisma {
     id?: true
     email?: true
     name?: true
+    bio?: true
     role?: true
     createdAt?: true
     updatedAt?: true
@@ -1873,6 +1898,7 @@ export namespace Prisma {
     id: bigint
     email: string
     name: string | null
+    bio: string | null
     role: string | null
     createdAt: Date
     updatedAt: Date
@@ -1901,6 +1927,7 @@ export namespace Prisma {
     id?: boolean
     email?: boolean
     name?: boolean
+    bio?: boolean
     role?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -2576,7 +2603,9 @@ export namespace Prisma {
     id: 'id',
     title: 'title',
     authorId: 'authorId',
+    body: 'body',
     published: 'published',
+    publishedAt: 'publishedAt',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -2588,6 +2617,7 @@ export namespace Prisma {
     id: 'id',
     email: 'email',
     name: 'name',
+    bio: 'bio',
     role: 'role',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -2616,7 +2646,9 @@ export namespace Prisma {
     id?: BigIntFilter | bigint | number
     title?: StringFilter | string
     authorId?: BigIntFilter | bigint | number
+    body?: StringFilter | string
     published?: BoolFilter | boolean
+    publishedAt?: DateTimeNullableFilter | Date | string | null
     createdAt?: DateTimeFilter | Date | string
     updatedAt?: DateTimeFilter | Date | string
     author?: XOR<UserRelationFilter, UserWhereInput>
@@ -2626,7 +2658,9 @@ export namespace Prisma {
     id?: SortOrder
     title?: SortOrder
     authorId?: SortOrder
+    body?: SortOrder
     published?: SortOrder
+    publishedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     author?: UserOrderByWithRelationInput
@@ -2640,7 +2674,9 @@ export namespace Prisma {
     id?: SortOrder
     title?: SortOrder
     authorId?: SortOrder
+    body?: SortOrder
     published?: SortOrder
+    publishedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: PostCountOrderByAggregateInput
@@ -2657,7 +2693,9 @@ export namespace Prisma {
     id?: BigIntWithAggregatesFilter | bigint | number
     title?: StringWithAggregatesFilter | string
     authorId?: BigIntWithAggregatesFilter | bigint | number
+    body?: StringWithAggregatesFilter | string
     published?: BoolWithAggregatesFilter | boolean
+    publishedAt?: DateTimeNullableWithAggregatesFilter | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter | Date | string
     updatedAt?: DateTimeWithAggregatesFilter | Date | string
   }
@@ -2669,6 +2707,7 @@ export namespace Prisma {
     id?: BigIntFilter | bigint | number
     email?: StringFilter | string
     name?: StringNullableFilter | string | null
+    bio?: StringNullableFilter | string | null
     role?: StringNullableFilter | string | null
     createdAt?: DateTimeFilter | Date | string
     updatedAt?: DateTimeFilter | Date | string
@@ -2679,6 +2718,7 @@ export namespace Prisma {
     id?: SortOrder
     email?: SortOrder
     name?: SortOrder
+    bio?: SortOrder
     role?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -2694,6 +2734,7 @@ export namespace Prisma {
     id?: SortOrder
     email?: SortOrder
     name?: SortOrder
+    bio?: SortOrder
     role?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -2711,6 +2752,7 @@ export namespace Prisma {
     id?: BigIntWithAggregatesFilter | bigint | number
     email?: StringWithAggregatesFilter | string
     name?: StringNullableWithAggregatesFilter | string | null
+    bio?: StringNullableWithAggregatesFilter | string | null
     role?: StringNullableWithAggregatesFilter | string | null
     createdAt?: DateTimeWithAggregatesFilter | Date | string
     updatedAt?: DateTimeWithAggregatesFilter | Date | string
@@ -2719,7 +2761,9 @@ export namespace Prisma {
   export type PostCreateInput = {
     id?: bigint | number
     title: string
+    body?: string
     published?: boolean
+    publishedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     author: UserCreateNestedOneWithoutPostsInput
@@ -2729,7 +2773,9 @@ export namespace Prisma {
     id?: bigint | number
     title: string
     authorId: bigint | number
+    body?: string
     published?: boolean
+    publishedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -2737,7 +2783,9 @@ export namespace Prisma {
   export type PostUpdateInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     title?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
     published?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     author?: UserUpdateOneRequiredWithoutPostsInput
@@ -2747,7 +2795,9 @@ export namespace Prisma {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     title?: StringFieldUpdateOperationsInput | string
     authorId?: BigIntFieldUpdateOperationsInput | bigint | number
+    body?: StringFieldUpdateOperationsInput | string
     published?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -2755,7 +2805,9 @@ export namespace Prisma {
   export type PostUpdateManyMutationInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     title?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
     published?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -2764,7 +2816,9 @@ export namespace Prisma {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     title?: StringFieldUpdateOperationsInput | string
     authorId?: BigIntFieldUpdateOperationsInput | bigint | number
+    body?: StringFieldUpdateOperationsInput | string
     published?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -2773,6 +2827,7 @@ export namespace Prisma {
     id?: bigint | number
     email: string
     name?: string | null
+    bio?: string | null
     role?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -2783,6 +2838,7 @@ export namespace Prisma {
     id?: bigint | number
     email: string
     name?: string | null
+    bio?: string | null
     role?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -2793,6 +2849,7 @@ export namespace Prisma {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     email?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     role?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -2803,6 +2860,7 @@ export namespace Prisma {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     email?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     role?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -2813,6 +2871,7 @@ export namespace Prisma {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     email?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     role?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -2822,6 +2881,7 @@ export namespace Prisma {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     email?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     role?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -2857,6 +2917,17 @@ export namespace Prisma {
     not?: NestedBoolFilter | boolean
   }
 
+  export type DateTimeNullableFilter = {
+    equals?: Date | string | null
+    in?: Enumerable<Date> | Enumerable<string> | null
+    notIn?: Enumerable<Date> | Enumerable<string> | null
+    lt?: Date | string
+    lte?: Date | string
+    gt?: Date | string
+    gte?: Date | string
+    not?: NestedDateTimeNullableFilter | Date | string | null
+  }
+
   export type DateTimeFilter = {
     equals?: Date | string
     in?: Enumerable<Date> | Enumerable<string>
@@ -2877,7 +2948,9 @@ export namespace Prisma {
     id?: SortOrder
     title?: SortOrder
     authorId?: SortOrder
+    body?: SortOrder
     published?: SortOrder
+    publishedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -2891,7 +2964,9 @@ export namespace Prisma {
     id?: SortOrder
     title?: SortOrder
     authorId?: SortOrder
+    body?: SortOrder
     published?: SortOrder
+    publishedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -2900,7 +2975,9 @@ export namespace Prisma {
     id?: SortOrder
     title?: SortOrder
     authorId?: SortOrder
+    body?: SortOrder
     published?: SortOrder
+    publishedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -2951,6 +3028,20 @@ export namespace Prisma {
     _max?: NestedBoolFilter
   }
 
+  export type DateTimeNullableWithAggregatesFilter = {
+    equals?: Date | string | null
+    in?: Enumerable<Date> | Enumerable<string> | null
+    notIn?: Enumerable<Date> | Enumerable<string> | null
+    lt?: Date | string
+    lte?: Date | string
+    gt?: Date | string
+    gte?: Date | string
+    not?: NestedDateTimeNullableWithAggregatesFilter | Date | string | null
+    _count?: NestedIntNullableFilter
+    _min?: NestedDateTimeNullableFilter
+    _max?: NestedDateTimeNullableFilter
+  }
+
   export type DateTimeWithAggregatesFilter = {
     equals?: Date | string
     in?: Enumerable<Date> | Enumerable<string>
@@ -2993,6 +3084,7 @@ export namespace Prisma {
     id?: SortOrder
     email?: SortOrder
     name?: SortOrder
+    bio?: SortOrder
     role?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -3006,6 +3098,7 @@ export namespace Prisma {
     id?: SortOrder
     email?: SortOrder
     name?: SortOrder
+    bio?: SortOrder
     role?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -3015,6 +3108,7 @@ export namespace Prisma {
     id?: SortOrder
     email?: SortOrder
     name?: SortOrder
+    bio?: SortOrder
     role?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -3061,6 +3155,10 @@ export namespace Prisma {
 
   export type BoolFieldUpdateOperationsInput = {
     set?: boolean
+  }
+
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
   }
 
   export type DateTimeFieldUpdateOperationsInput = {
@@ -3147,6 +3245,17 @@ export namespace Prisma {
     not?: NestedBoolFilter | boolean
   }
 
+  export type NestedDateTimeNullableFilter = {
+    equals?: Date | string | null
+    in?: Enumerable<Date> | Enumerable<string> | null
+    notIn?: Enumerable<Date> | Enumerable<string> | null
+    lt?: Date | string
+    lte?: Date | string
+    gt?: Date | string
+    gte?: Date | string
+    not?: NestedDateTimeNullableFilter | Date | string | null
+  }
+
   export type NestedDateTimeFilter = {
     equals?: Date | string
     in?: Enumerable<Date> | Enumerable<string>
@@ -3221,6 +3330,31 @@ export namespace Prisma {
     _max?: NestedBoolFilter
   }
 
+  export type NestedDateTimeNullableWithAggregatesFilter = {
+    equals?: Date | string | null
+    in?: Enumerable<Date> | Enumerable<string> | null
+    notIn?: Enumerable<Date> | Enumerable<string> | null
+    lt?: Date | string
+    lte?: Date | string
+    gt?: Date | string
+    gte?: Date | string
+    not?: NestedDateTimeNullableWithAggregatesFilter | Date | string | null
+    _count?: NestedIntNullableFilter
+    _min?: NestedDateTimeNullableFilter
+    _max?: NestedDateTimeNullableFilter
+  }
+
+  export type NestedIntNullableFilter = {
+    equals?: number | null
+    in?: Enumerable<number> | null
+    notIn?: Enumerable<number> | null
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedIntNullableFilter | number | null
+  }
+
   export type NestedDateTimeWithAggregatesFilter = {
     equals?: Date | string
     in?: Enumerable<Date> | Enumerable<string>
@@ -3266,21 +3400,11 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter
   }
 
-  export type NestedIntNullableFilter = {
-    equals?: number | null
-    in?: Enumerable<number> | null
-    notIn?: Enumerable<number> | null
-    lt?: number
-    lte?: number
-    gt?: number
-    gte?: number
-    not?: NestedIntNullableFilter | number | null
-  }
-
   export type UserCreateWithoutPostsInput = {
     id?: bigint | number
     email: string
     name?: string | null
+    bio?: string | null
     role?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -3290,6 +3414,7 @@ export namespace Prisma {
     id?: bigint | number
     email: string
     name?: string | null
+    bio?: string | null
     role?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -3309,6 +3434,7 @@ export namespace Prisma {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     email?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     role?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -3318,6 +3444,7 @@ export namespace Prisma {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     email?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     role?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -3326,7 +3453,9 @@ export namespace Prisma {
   export type PostCreateWithoutAuthorInput = {
     id?: bigint | number
     title: string
+    body?: string
     published?: boolean
+    publishedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -3334,7 +3463,9 @@ export namespace Prisma {
   export type PostUncheckedCreateWithoutAuthorInput = {
     id?: bigint | number
     title: string
+    body?: string
     published?: boolean
+    publishedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -3367,7 +3498,9 @@ export namespace Prisma {
     id?: BigIntFilter | bigint | number
     title?: StringFilter | string
     authorId?: BigIntFilter | bigint | number
+    body?: StringFilter | string
     published?: BoolFilter | boolean
+    publishedAt?: DateTimeNullableFilter | Date | string | null
     createdAt?: DateTimeFilter | Date | string
     updatedAt?: DateTimeFilter | Date | string
   }
@@ -3375,7 +3508,9 @@ export namespace Prisma {
   export type PostUpdateWithoutAuthorInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     title?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
     published?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -3383,7 +3518,9 @@ export namespace Prisma {
   export type PostUncheckedUpdateWithoutAuthorInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     title?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
     published?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -3391,7 +3528,9 @@ export namespace Prisma {
   export type PostUncheckedUpdateManyWithoutPostsInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     title?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
     published?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

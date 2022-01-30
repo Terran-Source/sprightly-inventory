@@ -80,7 +80,9 @@ exports.Prisma.PostScalarFieldEnum = makeEnum({
   id: 'id',
   title: 'title',
   authorId: 'authorId',
+  body: 'body',
   published: 'published',
+  publishedAt: 'publishedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 });
@@ -89,6 +91,7 @@ exports.Prisma.UserScalarFieldEnum = makeEnum({
   id: 'id',
   email: 'email',
   name: 'name',
+  bio: 'bio',
   role: 'role',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
