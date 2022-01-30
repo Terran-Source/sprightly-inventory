@@ -7,3 +7,7 @@ db/*.db
 db/*.db-journal
 db/*.lite
 db/*.lite-journal
+
+# prisma-client runtimes
+db/prisma-client/libquery_engine-debian-openssl-1.1.x.so.node
+db/prisma-client/runtime/
