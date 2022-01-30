@@ -1,0 +1,4 @@
+generator prismaClient {
+  provider = "prisma-client-js"
+  output   = "../prisma-client/"
+}

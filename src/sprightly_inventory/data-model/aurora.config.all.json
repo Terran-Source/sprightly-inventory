@@ -1,0 +1,9 @@
+{
+  "files": [
+    "./db/provider/datasource.prisma",
+    "./db/provider/generator.prisma",
+    "./db/models/user.prisma",
+    "./db/models/post.prisma"
+  ],
+  "output": "./db/sprightly_inventory.prisma"
+}

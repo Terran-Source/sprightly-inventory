@@ -1,0 +1,7 @@
+{
+  "files": [
+    "./db/provider/*.prisma",
+    "./db/models/*.prisma"
+  ],
+  "output": "./db/sprightly_inventory.prisma"
+}
