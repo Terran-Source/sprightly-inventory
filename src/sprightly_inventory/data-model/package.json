@@ -4,7 +4,11 @@
   "description": "Sqlite Data model handling with prisma",
   "main": "index.ts",
   "scripts": {
-    "generate-db": "aurora && prisma generate",
+    "generate-schema": "aurora",
+    "generate-db-client": "aurora && prisma generate",
+    "migrate-db-create": "aurora && prisma migrate dev --create-only",
+    "migrate-db-dev": "aurora && prisma migrate dev",
+    "migrate-db-status": "aurora && prisma migrate status",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Tamal Patra <patra.tamal@gmail.com> (https://github.com/turn-a-round)",

@@ -1,4 +1,4 @@
-datasource appDb {
+datasource dbContext {
   provider = "sqlite"
   url      = env("APP_DATABASE_URL")
 }
