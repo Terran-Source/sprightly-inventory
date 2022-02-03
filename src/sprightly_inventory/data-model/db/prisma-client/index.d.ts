@@ -121,7 +121,7 @@ export class PrismaClient<
    */
   $use(cb: Prisma.Middleware): void
 
-  /**
+/**
    * Executes a prepared raw query and returns the number of affected rows.
    * @example
    * ```
@@ -182,7 +182,6 @@ export class PrismaClient<
    */
   $transaction<P extends PrismaPromise<any>[]>(arg: [...P]): Promise<UnwrapTuple<P>>;
 
-
       /**
    * `prisma.post`: Exposes CRUD operations for the **Post** model.
     * Example usage:
@@ -231,8 +230,8 @@ export namespace Prisma {
   export import Decimal = runtime.Decimal
 
   /**
-   * Prisma Client JS version: 3.8.1
-   * Query Engine version: 34df67547cf5598f5a6cd3eb45f14ee70c3fb86f
+   * Prisma Client JS version: 3.9.1
+   * Query Engine version: bcc2ff906db47790ee902e7bbc76d7ffb1893009
    */
   export type PrismaVersion = {
     client: string
@@ -737,6 +736,7 @@ export namespace Prisma {
     | 'queryRaw'
     | 'aggregate'
     | 'count'
+    | 'runCommandRaw'
 
   /**
    * These options are being passed in to the middleware as "params"
@@ -1625,7 +1625,15 @@ export namespace Prisma {
    * Post updateMany
    */
   export type PostUpdateManyArgs = {
+    /**
+     * The data used to update Posts.
+     * 
+    **/
     data: XOR<PostUpdateManyMutationInput, PostUncheckedUpdateManyInput>
+    /**
+     * Filter which Posts to update
+     * 
+    **/
     where?: PostWhereInput
   }
 
@@ -1688,6 +1696,10 @@ export namespace Prisma {
    * Post deleteMany
    */
   export type PostDeleteManyArgs = {
+    /**
+     * Filter which Posts to delete
+     * 
+    **/
     where?: PostWhereInput
   }
 
@@ -2507,7 +2519,15 @@ export namespace Prisma {
    * User updateMany
    */
   export type UserUpdateManyArgs = {
+    /**
+     * The data used to update Users.
+     * 
+    **/
     data: XOR<UserUpdateManyMutationInput, UserUncheckedUpdateManyInput>
+    /**
+     * Filter which Users to update
+     * 
+    **/
     where?: UserWhereInput
   }
 
@@ -2570,6 +2590,10 @@ export namespace Prisma {
    * User deleteMany
    */
   export type UserDeleteManyArgs = {
+    /**
+     * Filter which Users to delete
+     * 
+    **/
     where?: UserWhereInput
   }
 
