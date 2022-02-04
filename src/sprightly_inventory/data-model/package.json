@@ -22,7 +22,7 @@
   },
   "devDependencies": {
     "@types/node": "^17.0.14",
-    "dummy-faker": "^0.3.0",
+    "dummy-faker": "^0.5.0",
     "prisma": "^3.9.1",
     "prisma-aurora": "^1.2.8",
     "ts-node": "^10.4.0",

@@ -672,10 +672,10 @@ dotenv@15.0.0:
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-15.0.0.tgz#2a585639429bf2c2c62f387f0fffde9c75aafde0"
   integrity sha512-/l1sXXm79ry34KwwS0y4oVZjB468iw/6u9g1W26dtexKcIJAnVL2pMF+hxQwzZ7LutxOwEgtym9eIxvX33CMKg==
 
-dummy-faker@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/dummy-faker/-/dummy-faker-0.3.0.tgz#c5f1a254bb7da6a9195a40ce80ba5765ea9b0a7b"
-  integrity sha512-iUkMPmt/Qzxpp3u8P6I9ypYFJb0SG75ibV2VPizXa3B5TfWMrktVvpZJSO9yl8rLIQOVnLNAWkuKJetIApXI0A==
+dummy-faker@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/dummy-faker/-/dummy-faker-0.5.0.tgz#b7ed856cc80c12dced688906b739a440641bd76e"
+  integrity sha512-6NHMYBw3tull57PYpve65Q+6f8BZyEiV4n1Kp3L/UV72Z47oIPN58IfWLPVgumfIgtu1uAh6jVch0A0jLGtmZQ==
   dependencies:
     "@faker-js/faker" "^6.0.0-alpha.5"
 
@@ -1652,9 +1652,9 @@ shell-quote@1.7.3:
   integrity sha512-Vpfqwm4EnqGdlsBFNmHhxhElJYrdfcxPThu+ryKS5J8L/fhAwLazFZtq+S+TWZ9ANj2piSQLGj6NQg+lKPmxrw==
 
 signal-exit@^3.0.3:
-  version "3.0.6"
-  resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.6.tgz#24e630c4b0f03fea446a2bd299e62b4a6ca8d0af"
-  integrity sha512-sDl4qMFpijcGw22U5w63KmD3cZJfBuFlVNbVMKje2keoKML7X2UzWbc4XrmEbDwg0NXJc3yv4/ox7b+JWb57kQ==
+  version "3.0.7"
+  resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.7.tgz#a9a1767f8af84155114eaabd73f99273c8f59ad9"
+  integrity sha512-wnD2ZE+l+SPC/uoS0vXeE9L1+0wuaMqKlfz9AMUo38JsyLSBWSFcHR1Rri62LZc12vLr1gb3jl7iwQhgwpAbGQ==
 
 slash@^3.0.0:
   version "3.0.0"

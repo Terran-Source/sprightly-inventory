@@ -35,6 +35,7 @@ export type User = {
   id: bigint
   email: string
   name: string | null
+  gender: string | null
   bio: string | null
   role: string | null
   createdAt: Date
@@ -1747,6 +1748,7 @@ export namespace Prisma {
     id: bigint | null
     email: string | null
     name: string | null
+    gender: string | null
     bio: string | null
     role: string | null
     createdAt: Date | null
@@ -1757,6 +1759,7 @@ export namespace Prisma {
     id: bigint | null
     email: string | null
     name: string | null
+    gender: string | null
     bio: string | null
     role: string | null
     createdAt: Date | null
@@ -1767,6 +1770,7 @@ export namespace Prisma {
     id: number
     email: number
     name: number
+    gender: number
     bio: number
     role: number
     createdAt: number
@@ -1787,6 +1791,7 @@ export namespace Prisma {
     id?: true
     email?: true
     name?: true
+    gender?: true
     bio?: true
     role?: true
     createdAt?: true
@@ -1797,6 +1802,7 @@ export namespace Prisma {
     id?: true
     email?: true
     name?: true
+    gender?: true
     bio?: true
     role?: true
     createdAt?: true
@@ -1807,6 +1813,7 @@ export namespace Prisma {
     id?: true
     email?: true
     name?: true
+    gender?: true
     bio?: true
     role?: true
     createdAt?: true
@@ -1910,6 +1917,7 @@ export namespace Prisma {
     id: bigint
     email: string
     name: string | null
+    gender: string | null
     bio: string | null
     role: string | null
     createdAt: Date
@@ -1939,6 +1947,7 @@ export namespace Prisma {
     id?: boolean
     email?: boolean
     name?: boolean
+    gender?: boolean
     bio?: boolean
     role?: boolean
     createdAt?: boolean
@@ -2641,6 +2650,7 @@ export namespace Prisma {
     id: 'id',
     email: 'email',
     name: 'name',
+    gender: 'gender',
     bio: 'bio',
     role: 'role',
     createdAt: 'createdAt',
@@ -2731,6 +2741,7 @@ export namespace Prisma {
     id?: BigIntFilter | bigint | number
     email?: StringFilter | string
     name?: StringNullableFilter | string | null
+    gender?: StringNullableFilter | string | null
     bio?: StringNullableFilter | string | null
     role?: StringNullableFilter | string | null
     createdAt?: DateTimeFilter | Date | string
@@ -2742,6 +2753,7 @@ export namespace Prisma {
     id?: SortOrder
     email?: SortOrder
     name?: SortOrder
+    gender?: SortOrder
     bio?: SortOrder
     role?: SortOrder
     createdAt?: SortOrder
@@ -2758,6 +2770,7 @@ export namespace Prisma {
     id?: SortOrder
     email?: SortOrder
     name?: SortOrder
+    gender?: SortOrder
     bio?: SortOrder
     role?: SortOrder
     createdAt?: SortOrder
@@ -2776,6 +2789,7 @@ export namespace Prisma {
     id?: BigIntWithAggregatesFilter | bigint | number
     email?: StringWithAggregatesFilter | string
     name?: StringNullableWithAggregatesFilter | string | null
+    gender?: StringNullableWithAggregatesFilter | string | null
     bio?: StringNullableWithAggregatesFilter | string | null
     role?: StringNullableWithAggregatesFilter | string | null
     createdAt?: DateTimeWithAggregatesFilter | Date | string
@@ -2851,6 +2865,7 @@ export namespace Prisma {
     id?: bigint | number
     email: string
     name?: string | null
+    gender?: string | null
     bio?: string | null
     role?: string | null
     createdAt?: Date | string
@@ -2862,6 +2877,7 @@ export namespace Prisma {
     id?: bigint | number
     email: string
     name?: string | null
+    gender?: string | null
     bio?: string | null
     role?: string | null
     createdAt?: Date | string
@@ -2873,6 +2889,7 @@ export namespace Prisma {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     email?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     role?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -2884,6 +2901,7 @@ export namespace Prisma {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     email?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     role?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -2895,6 +2913,7 @@ export namespace Prisma {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     email?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     role?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -2905,6 +2924,7 @@ export namespace Prisma {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     email?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     role?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -3108,6 +3128,7 @@ export namespace Prisma {
     id?: SortOrder
     email?: SortOrder
     name?: SortOrder
+    gender?: SortOrder
     bio?: SortOrder
     role?: SortOrder
     createdAt?: SortOrder
@@ -3122,6 +3143,7 @@ export namespace Prisma {
     id?: SortOrder
     email?: SortOrder
     name?: SortOrder
+    gender?: SortOrder
     bio?: SortOrder
     role?: SortOrder
     createdAt?: SortOrder
@@ -3132,6 +3154,7 @@ export namespace Prisma {
     id?: SortOrder
     email?: SortOrder
     name?: SortOrder
+    gender?: SortOrder
     bio?: SortOrder
     role?: SortOrder
     createdAt?: SortOrder
@@ -3428,6 +3451,7 @@ export namespace Prisma {
     id?: bigint | number
     email: string
     name?: string | null
+    gender?: string | null
     bio?: string | null
     role?: string | null
     createdAt?: Date | string
@@ -3438,6 +3462,7 @@ export namespace Prisma {
     id?: bigint | number
     email: string
     name?: string | null
+    gender?: string | null
     bio?: string | null
     role?: string | null
     createdAt?: Date | string
@@ -3458,6 +3483,7 @@ export namespace Prisma {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     email?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     role?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -3468,6 +3494,7 @@ export namespace Prisma {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     email?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     role?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string

@@ -11,10 +11,10 @@ enum UserRole {
   Admin = 'Admin',
 }
 
-// dummy.register('user',{prisma.user.})
 let userModel = {
   [User.id]: DataType.int,
   [User.email]: DataType.string,
+  [User.gender]: DataType.string,
   [User.name]: DataType.string,
   [User.bio]: DataType.string,
   [User.role]: DataType.string,
@@ -36,7 +36,7 @@ let postModel = {
 dummy
   .register(Prisma.ModelName.User, userModel)
   .customize(Prisma.ModelName.User, (objFaker) => {
-    objFaker.ruleFor('gender', (faker) => faker.name.gender(true));
+    objFaker.ruleFor(User.gender, (faker) => faker.name.gender(true));
     objFaker.ruleFor('fname', (faker, u) => faker.name.firstName(u.gender));
     objFaker.ruleFor('lname', (faker, u) => faker.name.lastName(u.gender));
     objFaker.ruleFor(User.email, (faker, u) =>
@@ -55,7 +55,8 @@ dummy
     );
   })
   .register(Prisma.ModelName.Post, postModel)
-  .customize(Prisma.ModelName.Post, (objFaker) => {
+  .customize(Prisma.ModelName.Post, (objFaker, data) => {
+    objFaker.ruleFor(Post.authorId, () => data.authorId);
     objFaker.ruleFor(Post.title, (faker, u) => faker.random.words());
     objFaker.ruleFor(Post.body, (faker, u) => faker.lorem.paragraphs());
     objFaker.ruleFor(Post.published, (faker, u) => faker.datatype.boolean());
@@ -69,9 +70,21 @@ dummy
   });
 
 (async () => {
-  const users = await dummy.generate(Prisma.ModelName.User, 10);
-
-  const posts = await dummy.generate(Prisma.ModelName.Post, 30);
+  const users = await dummy.generate(Prisma.ModelName.User, 5);
+  let posts = <any>[];
+  for (const u in users) {
+    const user = users[u];
+    posts = [
+      ...posts,
+      ...(await dummy.generate(
+        Prisma.ModelName.Post,
+        dummy.faker.datatype.number(10),
+        {
+          authorId: user.id,
+        }
+      )),
+    ];
+  }
   console.info('users:', users);
   console.info('posts:', posts);
 })();
