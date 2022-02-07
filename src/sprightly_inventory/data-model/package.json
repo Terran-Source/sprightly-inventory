@@ -9,8 +9,9 @@
     "generate-db-client": "aurora && prisma generate",
     "migrate-db-create": "aurora && prisma migrate dev --create-only",
     "migrate-db-dev": "prisma migrate dev --skip-seed",
+    "migrate-db-reset": "prisma migrate reset",
     "migrate-db-seed": "prisma db seed",
-    "migrate-db-status": "aurora && prisma migrate status",
+    "migrate-db-status": "prisma migrate status",
     "clean-all": "rm -rf node_modules dist db/prisma-client yarn.lock yarn-error.log tsconfig.tsbuildinfo",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -21,8 +22,9 @@
     "seed": "ts-node db/seed"
   },
   "devDependencies": {
-    "@types/node": "^17.0.14",
-    "dummy-faker": "^0.5.0",
+    "@types/node": "^17.0.15",
+    "dummy-faker": "^0.7.2",
+    "node-abort-controller": "^3.0.1",
     "prisma": "^3.9.1",
     "prisma-aurora": "^1.2.8",
     "ts-node": "^10.4.0",
