@@ -81,8 +81,8 @@ const _cleanupUser = (user: UserType): UserType => {
 };
 
 (async () => {
-  const users = await dummy.generate(Prisma.ModelName.User, 25);
-  let posts = <any>[];
+  const users: UserType[] = await dummy.generate(Prisma.ModelName.User, 100);
+  let posts: PostType[] = [];
   for (const u in users) {
     const user = users[u];
     posts = [

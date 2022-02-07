@@ -1,1 +1,1 @@
-user-with-posts.ts
+stream-user-with-posts.ts

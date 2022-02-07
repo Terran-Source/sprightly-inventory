@@ -81,7 +81,7 @@ const _cleanupUser = (user: UserType): UserType => {
 };
 
 const _handleUserPostCreation = async (user: UserType): Promise<UserType> => {
-  const posts = await dummy.generate(
+  const posts: PostType[] = await dummy.generate(
     Prisma.ModelName.Post,
     dummy.faker.datatype.number(10),
     null,
@@ -97,7 +97,7 @@ const _handleUserPostCreation = async (user: UserType): Promise<UserType> => {
 };
 
 (async () => {
-  const users = await dummy.generate(Prisma.ModelName.User, 25);
+  const users: UserType[] = await dummy.generate(Prisma.ModelName.User, 100);
   const creationJobs = users.map((user) =>
     _handleUserPostCreation(_cleanupUser(user)).then((u) =>
       console.info('user & post created')
