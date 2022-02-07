@@ -17,9 +17,9 @@ type UnwrapTuple<Tuple extends readonly unknown[]> = {
  * 
  */
 export type Post = {
-  id: bigint
+  id: string
   title: string
-  authorId: bigint
+  authorId: string
   body: string
   published: boolean
   publishedAt: Date | null
@@ -32,7 +32,7 @@ export type Post = {
  * 
  */
 export type User = {
-  id: bigint
+  id: string
   email: string
   name: string | null
   gender: string | null
@@ -830,26 +830,14 @@ export namespace Prisma {
 
   export type AggregatePost = {
     _count: PostCountAggregateOutputType | null
-    _avg: PostAvgAggregateOutputType | null
-    _sum: PostSumAggregateOutputType | null
     _min: PostMinAggregateOutputType | null
     _max: PostMaxAggregateOutputType | null
   }
 
-  export type PostAvgAggregateOutputType = {
-    id: number | null
-    authorId: number | null
-  }
-
-  export type PostSumAggregateOutputType = {
-    id: bigint | null
-    authorId: bigint | null
-  }
-
   export type PostMinAggregateOutputType = {
-    id: bigint | null
+    id: string | null
     title: string | null
-    authorId: bigint | null
+    authorId: string | null
     body: string | null
     published: boolean | null
     publishedAt: Date | null
@@ -858,9 +846,9 @@ export namespace Prisma {
   }
 
   export type PostMaxAggregateOutputType = {
-    id: bigint | null
+    id: string | null
     title: string | null
-    authorId: bigint | null
+    authorId: string | null
     body: string | null
     published: boolean | null
     publishedAt: Date | null
@@ -880,16 +868,6 @@ export namespace Prisma {
     _all: number
   }
 
-
-  export type PostAvgAggregateInputType = {
-    id?: true
-    authorId?: true
-  }
-
-  export type PostSumAggregateInputType = {
-    id?: true
-    authorId?: true
-  }
 
   export type PostMinAggregateInputType = {
     id?: true
@@ -968,18 +946,6 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Select which fields to average
-    **/
-    _avg?: PostAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: PostSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
      * Select which fields to find the minimum value
     **/
     _min?: PostMinAggregateInputType
@@ -1010,25 +976,21 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: PostCountAggregateInputType | true
-    _avg?: PostAvgAggregateInputType
-    _sum?: PostSumAggregateInputType
     _min?: PostMinAggregateInputType
     _max?: PostMaxAggregateInputType
   }
 
 
   export type PostGroupByOutputType = {
-    id: bigint
+    id: string
     title: string
-    authorId: bigint
+    authorId: string
     body: string
     published: boolean
     publishedAt: Date | null
     createdAt: Date
     updatedAt: Date
     _count: PostCountAggregateOutputType | null
-    _avg: PostAvgAggregateOutputType | null
-    _sum: PostSumAggregateOutputType | null
     _min: PostMinAggregateOutputType | null
     _max: PostMaxAggregateOutputType | null
   }
@@ -1730,22 +1692,12 @@ export namespace Prisma {
 
   export type AggregateUser = {
     _count: UserCountAggregateOutputType | null
-    _avg: UserAvgAggregateOutputType | null
-    _sum: UserSumAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
   }
 
-  export type UserAvgAggregateOutputType = {
-    id: number | null
-  }
-
-  export type UserSumAggregateOutputType = {
-    id: bigint | null
-  }
-
   export type UserMinAggregateOutputType = {
-    id: bigint | null
+    id: string | null
     email: string | null
     name: string | null
     gender: string | null
@@ -1756,7 +1708,7 @@ export namespace Prisma {
   }
 
   export type UserMaxAggregateOutputType = {
-    id: bigint | null
+    id: string | null
     email: string | null
     name: string | null
     gender: string | null
@@ -1778,14 +1730,6 @@ export namespace Prisma {
     _all: number
   }
 
-
-  export type UserAvgAggregateInputType = {
-    id?: true
-  }
-
-  export type UserSumAggregateInputType = {
-    id?: true
-  }
 
   export type UserMinAggregateInputType = {
     id?: true
@@ -1864,18 +1808,6 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Select which fields to average
-    **/
-    _avg?: UserAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: UserSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
      * Select which fields to find the minimum value
     **/
     _min?: UserMinAggregateInputType
@@ -1906,15 +1838,13 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: UserCountAggregateInputType | true
-    _avg?: UserAvgAggregateInputType
-    _sum?: UserSumAggregateInputType
     _min?: UserMinAggregateInputType
     _max?: UserMaxAggregateInputType
   }
 
 
   export type UserGroupByOutputType = {
-    id: bigint
+    id: string
     email: string
     name: string | null
     gender: string | null
@@ -1923,8 +1853,6 @@ export namespace Prisma {
     createdAt: Date
     updatedAt: Date
     _count: UserCountAggregateOutputType | null
-    _avg: UserAvgAggregateOutputType | null
-    _sum: UserSumAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
   }
@@ -2677,9 +2605,9 @@ export namespace Prisma {
     AND?: Enumerable<PostWhereInput>
     OR?: Enumerable<PostWhereInput>
     NOT?: Enumerable<PostWhereInput>
-    id?: BigIntFilter | bigint | number
+    id?: StringFilter | string
     title?: StringFilter | string
-    authorId?: BigIntFilter | bigint | number
+    authorId?: StringFilter | string
     body?: StringFilter | string
     published?: BoolFilter | boolean
     publishedAt?: DateTimeNullableFilter | Date | string | null
@@ -2701,7 +2629,7 @@ export namespace Prisma {
   }
 
   export type PostWhereUniqueInput = {
-    id?: bigint | number
+    id?: string
   }
 
   export type PostOrderByWithAggregationInput = {
@@ -2714,19 +2642,17 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: PostCountOrderByAggregateInput
-    _avg?: PostAvgOrderByAggregateInput
     _max?: PostMaxOrderByAggregateInput
     _min?: PostMinOrderByAggregateInput
-    _sum?: PostSumOrderByAggregateInput
   }
 
   export type PostScalarWhereWithAggregatesInput = {
     AND?: Enumerable<PostScalarWhereWithAggregatesInput>
     OR?: Enumerable<PostScalarWhereWithAggregatesInput>
     NOT?: Enumerable<PostScalarWhereWithAggregatesInput>
-    id?: BigIntWithAggregatesFilter | bigint | number
+    id?: StringWithAggregatesFilter | string
     title?: StringWithAggregatesFilter | string
-    authorId?: BigIntWithAggregatesFilter | bigint | number
+    authorId?: StringWithAggregatesFilter | string
     body?: StringWithAggregatesFilter | string
     published?: BoolWithAggregatesFilter | boolean
     publishedAt?: DateTimeNullableWithAggregatesFilter | Date | string | null
@@ -2738,7 +2664,7 @@ export namespace Prisma {
     AND?: Enumerable<UserWhereInput>
     OR?: Enumerable<UserWhereInput>
     NOT?: Enumerable<UserWhereInput>
-    id?: BigIntFilter | bigint | number
+    id?: StringFilter | string
     email?: StringFilter | string
     name?: StringNullableFilter | string | null
     gender?: StringNullableFilter | string | null
@@ -2762,7 +2688,7 @@ export namespace Prisma {
   }
 
   export type UserWhereUniqueInput = {
-    id?: bigint | number
+    id?: string
     email?: string
   }
 
@@ -2776,17 +2702,15 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: UserCountOrderByAggregateInput
-    _avg?: UserAvgOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
-    _sum?: UserSumOrderByAggregateInput
   }
 
   export type UserScalarWhereWithAggregatesInput = {
     AND?: Enumerable<UserScalarWhereWithAggregatesInput>
     OR?: Enumerable<UserScalarWhereWithAggregatesInput>
     NOT?: Enumerable<UserScalarWhereWithAggregatesInput>
-    id?: BigIntWithAggregatesFilter | bigint | number
+    id?: StringWithAggregatesFilter | string
     email?: StringWithAggregatesFilter | string
     name?: StringNullableWithAggregatesFilter | string | null
     gender?: StringNullableWithAggregatesFilter | string | null
@@ -2797,7 +2721,7 @@ export namespace Prisma {
   }
 
   export type PostCreateInput = {
-    id?: bigint | number
+    id: string
     title: string
     body?: string
     published?: boolean
@@ -2808,9 +2732,9 @@ export namespace Prisma {
   }
 
   export type PostUncheckedCreateInput = {
-    id?: bigint | number
+    id: string
     title: string
-    authorId: bigint | number
+    authorId: string
     body?: string
     published?: boolean
     publishedAt?: Date | string | null
@@ -2819,7 +2743,7 @@ export namespace Prisma {
   }
 
   export type PostUpdateInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     body?: StringFieldUpdateOperationsInput | string
     published?: BoolFieldUpdateOperationsInput | boolean
@@ -2830,9 +2754,9 @@ export namespace Prisma {
   }
 
   export type PostUncheckedUpdateInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
-    authorId?: BigIntFieldUpdateOperationsInput | bigint | number
+    authorId?: StringFieldUpdateOperationsInput | string
     body?: StringFieldUpdateOperationsInput | string
     published?: BoolFieldUpdateOperationsInput | boolean
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2841,7 +2765,7 @@ export namespace Prisma {
   }
 
   export type PostUpdateManyMutationInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     body?: StringFieldUpdateOperationsInput | string
     published?: BoolFieldUpdateOperationsInput | boolean
@@ -2851,9 +2775,9 @@ export namespace Prisma {
   }
 
   export type PostUncheckedUpdateManyInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
-    authorId?: BigIntFieldUpdateOperationsInput | bigint | number
+    authorId?: StringFieldUpdateOperationsInput | string
     body?: StringFieldUpdateOperationsInput | string
     published?: BoolFieldUpdateOperationsInput | boolean
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2862,7 +2786,7 @@ export namespace Prisma {
   }
 
   export type UserCreateInput = {
-    id?: bigint | number
+    id: string
     email: string
     name?: string | null
     gender?: string | null
@@ -2874,7 +2798,7 @@ export namespace Prisma {
   }
 
   export type UserUncheckedCreateInput = {
-    id?: bigint | number
+    id: string
     email: string
     name?: string | null
     gender?: string | null
@@ -2886,7 +2810,7 @@ export namespace Prisma {
   }
 
   export type UserUpdateInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
@@ -2898,7 +2822,7 @@ export namespace Prisma {
   }
 
   export type UserUncheckedUpdateInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
@@ -2910,7 +2834,7 @@ export namespace Prisma {
   }
 
   export type UserUpdateManyMutationInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
@@ -2921,7 +2845,7 @@ export namespace Prisma {
   }
 
   export type UserUncheckedUpdateManyInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
@@ -2929,17 +2853,6 @@ export namespace Prisma {
     role?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type BigIntFilter = {
-    equals?: bigint | number
-    in?: Enumerable<bigint> | Enumerable<number>
-    notIn?: Enumerable<bigint> | Enumerable<number>
-    lt?: bigint | number
-    lte?: bigint | number
-    gt?: bigint | number
-    gte?: bigint | number
-    not?: NestedBigIntFilter | bigint | number
   }
 
   export type StringFilter = {
@@ -2999,11 +2912,6 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type PostAvgOrderByAggregateInput = {
-    id?: SortOrder
-    authorId?: SortOrder
-  }
-
   export type PostMaxOrderByAggregateInput = {
     id?: SortOrder
     title?: SortOrder
@@ -3024,27 +2932,6 @@ export namespace Prisma {
     publishedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-  }
-
-  export type PostSumOrderByAggregateInput = {
-    id?: SortOrder
-    authorId?: SortOrder
-  }
-
-  export type BigIntWithAggregatesFilter = {
-    equals?: bigint | number
-    in?: Enumerable<bigint> | Enumerable<number>
-    notIn?: Enumerable<bigint> | Enumerable<number>
-    lt?: bigint | number
-    lte?: bigint | number
-    gt?: bigint | number
-    gte?: bigint | number
-    not?: NestedBigIntWithAggregatesFilter | bigint | number
-    _count?: NestedIntFilter
-    _avg?: NestedFloatFilter
-    _sum?: NestedBigIntFilter
-    _min?: NestedBigIntFilter
-    _max?: NestedBigIntFilter
   }
 
   export type StringWithAggregatesFilter = {
@@ -3135,10 +3022,6 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type UserAvgOrderByAggregateInput = {
-    id?: SortOrder
-  }
-
   export type UserMaxOrderByAggregateInput = {
     id?: SortOrder
     email?: SortOrder
@@ -3159,10 +3042,6 @@ export namespace Prisma {
     role?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-  }
-
-  export type UserSumOrderByAggregateInput = {
-    id?: SortOrder
   }
 
   export type StringNullableWithAggregatesFilter = {
@@ -3186,14 +3065,6 @@ export namespace Prisma {
     create?: XOR<UserCreateWithoutPostsInput, UserUncheckedCreateWithoutPostsInput>
     connectOrCreate?: UserCreateOrConnectWithoutPostsInput
     connect?: UserWhereUniqueInput
-  }
-
-  export type BigIntFieldUpdateOperationsInput = {
-    set?: bigint | number
-    increment?: bigint | number
-    decrement?: bigint | number
-    multiply?: bigint | number
-    divide?: bigint | number
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -3262,17 +3133,6 @@ export namespace Prisma {
     deleteMany?: Enumerable<PostScalarWhereInput>
   }
 
-  export type NestedBigIntFilter = {
-    equals?: bigint | number
-    in?: Enumerable<bigint> | Enumerable<number>
-    notIn?: Enumerable<bigint> | Enumerable<number>
-    lt?: bigint | number
-    lte?: bigint | number
-    gt?: bigint | number
-    gte?: bigint | number
-    not?: NestedBigIntFilter | bigint | number
-  }
-
   export type NestedStringFilter = {
     equals?: string
     in?: Enumerable<string>
@@ -3314,44 +3174,6 @@ export namespace Prisma {
     not?: NestedDateTimeFilter | Date | string
   }
 
-  export type NestedBigIntWithAggregatesFilter = {
-    equals?: bigint | number
-    in?: Enumerable<bigint> | Enumerable<number>
-    notIn?: Enumerable<bigint> | Enumerable<number>
-    lt?: bigint | number
-    lte?: bigint | number
-    gt?: bigint | number
-    gte?: bigint | number
-    not?: NestedBigIntWithAggregatesFilter | bigint | number
-    _count?: NestedIntFilter
-    _avg?: NestedFloatFilter
-    _sum?: NestedBigIntFilter
-    _min?: NestedBigIntFilter
-    _max?: NestedBigIntFilter
-  }
-
-  export type NestedIntFilter = {
-    equals?: number
-    in?: Enumerable<number>
-    notIn?: Enumerable<number>
-    lt?: number
-    lte?: number
-    gt?: number
-    gte?: number
-    not?: NestedIntFilter | number
-  }
-
-  export type NestedFloatFilter = {
-    equals?: number
-    in?: Enumerable<number>
-    notIn?: Enumerable<number>
-    lt?: number
-    lte?: number
-    gt?: number
-    gte?: number
-    not?: NestedFloatFilter | number
-  }
-
   export type NestedStringWithAggregatesFilter = {
     equals?: string
     in?: Enumerable<string>
@@ -3367,6 +3189,17 @@ export namespace Prisma {
     _count?: NestedIntFilter
     _min?: NestedStringFilter
     _max?: NestedStringFilter
+  }
+
+  export type NestedIntFilter = {
+    equals?: number
+    in?: Enumerable<number>
+    notIn?: Enumerable<number>
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedIntFilter | number
   }
 
   export type NestedBoolWithAggregatesFilter = {
@@ -3448,7 +3281,7 @@ export namespace Prisma {
   }
 
   export type UserCreateWithoutPostsInput = {
-    id?: bigint | number
+    id: string
     email: string
     name?: string | null
     gender?: string | null
@@ -3459,7 +3292,7 @@ export namespace Prisma {
   }
 
   export type UserUncheckedCreateWithoutPostsInput = {
-    id?: bigint | number
+    id: string
     email: string
     name?: string | null
     gender?: string | null
@@ -3480,7 +3313,7 @@ export namespace Prisma {
   }
 
   export type UserUpdateWithoutPostsInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
@@ -3491,7 +3324,7 @@ export namespace Prisma {
   }
 
   export type UserUncheckedUpdateWithoutPostsInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
@@ -3502,7 +3335,7 @@ export namespace Prisma {
   }
 
   export type PostCreateWithoutAuthorInput = {
-    id?: bigint | number
+    id: string
     title: string
     body?: string
     published?: boolean
@@ -3512,7 +3345,7 @@ export namespace Prisma {
   }
 
   export type PostUncheckedCreateWithoutAuthorInput = {
-    id?: bigint | number
+    id: string
     title: string
     body?: string
     published?: boolean
@@ -3546,9 +3379,9 @@ export namespace Prisma {
     AND?: Enumerable<PostScalarWhereInput>
     OR?: Enumerable<PostScalarWhereInput>
     NOT?: Enumerable<PostScalarWhereInput>
-    id?: BigIntFilter | bigint | number
+    id?: StringFilter | string
     title?: StringFilter | string
-    authorId?: BigIntFilter | bigint | number
+    authorId?: StringFilter | string
     body?: StringFilter | string
     published?: BoolFilter | boolean
     publishedAt?: DateTimeNullableFilter | Date | string | null
@@ -3557,7 +3390,7 @@ export namespace Prisma {
   }
 
   export type PostUpdateWithoutAuthorInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     body?: StringFieldUpdateOperationsInput | string
     published?: BoolFieldUpdateOperationsInput | boolean
@@ -3567,7 +3400,7 @@ export namespace Prisma {
   }
 
   export type PostUncheckedUpdateWithoutAuthorInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     body?: StringFieldUpdateOperationsInput | string
     published?: BoolFieldUpdateOperationsInput | boolean
@@ -3577,7 +3410,7 @@ export namespace Prisma {
   }
 
   export type PostUncheckedUpdateManyWithoutPostsInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     body?: StringFieldUpdateOperationsInput | string
     published?: BoolFieldUpdateOperationsInput | boolean

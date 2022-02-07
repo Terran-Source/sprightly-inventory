@@ -1,9 +1,9 @@
 -- RedefineTables
 PRAGMA foreign_keys=OFF;
 CREATE TABLE "new_Post" (
-    "id" BIGINT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL PRIMARY KEY,
     "title" TEXT NOT NULL,
-    "authorId" BIGINT NOT NULL,
+    "authorId" TEXT NOT NULL,
     "body" TEXT NOT NULL DEFAULT '',
     "published" BOOLEAN NOT NULL DEFAULT false,
     "publishedAt" DATETIME,
@@ -15,7 +15,7 @@ INSERT INTO "new_Post" ("authorId", "createdAt", "id", "published", "title", "up
 DROP TABLE "Post";
 ALTER TABLE "new_Post" RENAME TO "Post";
 CREATE TABLE "new_User" (
-    "id" BIGINT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL PRIMARY KEY,
     "email" TEXT NOT NULL,
     "name" TEXT,
     "gender" TEXT,

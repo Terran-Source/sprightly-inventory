@@ -1,8 +1,8 @@
 -- CreateTable
 CREATE TABLE "Post" (
-    "id" BIGINT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL PRIMARY KEY,
     "title" TEXT NOT NULL,
-    "authorId" BIGINT NOT NULL,
+    "authorId" TEXT NOT NULL,
     "published" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL,
@@ -11,7 +11,7 @@ CREATE TABLE "Post" (
 
 -- CreateTable
 CREATE TABLE "User" (
-    "id" BIGINT NOT NULL PRIMARY KEY,
+    "id" TEXT NOT NULL PRIMARY KEY,
     "email" TEXT NOT NULL,
     "name" TEXT,
     "role" TEXT,
