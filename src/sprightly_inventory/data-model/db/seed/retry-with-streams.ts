@@ -33,7 +33,7 @@ const _handleUserPostCreation = async (user: UserType): Promise<void> => {
     .on('data', (post: PostType) => {
       postCount++;
       pRetry(() => prisma.post.create({ data: post }), retryOptions);
-      // .then((p) => console.info('post created: ', p.id));
+      // .then((p) => console.info('post created: ', p.id), console.error);
     })
     .on('end', () => {
       console.info(
