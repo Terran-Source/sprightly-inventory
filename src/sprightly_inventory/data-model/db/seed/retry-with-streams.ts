@@ -25,7 +25,7 @@ const _handleUserPostCreation = async (user: UserType): Promise<void> => {
 
   const postReader = dummy.generateStream(
     Prisma.ModelName.Post,
-    dummy.faker.datatype.number(5),
+    dummy.faker.datatype.number(20),
     { authorId: createdUser.id },
     { signal: ac.signal }
   );
@@ -48,7 +48,7 @@ const _handleUserPostCreation = async (user: UserType): Promise<void> => {
 };
 
 (async () => {
-  const userReader = dummy.generateStream(Prisma.ModelName.User, 1000, null, {
+  const userReader = dummy.generateStream(Prisma.ModelName.User, 2500, null, {
     signal: ac.signal,
   });
 
